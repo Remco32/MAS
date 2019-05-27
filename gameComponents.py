@@ -54,16 +54,5 @@ class Tokens:
 
         self.storm_tokens = 3
 
-"""
-# Contains the deck, discard, tokens
-class Table:
-    # Set up the table with a deck, an empty discard pile and the tokens
-    def __init__(self):
-"""
-
-deck = Deck()
-discard = Discard()
-discard.add_to_discard(deck.get_new_card())
 
 
-print()
