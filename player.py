@@ -65,8 +65,10 @@ class Player:
     def play_card(self, card, table, pile_number):
         table.place_card(card, pile_number)
         self.hand.remove(card)
+        # Take new card
+        self.hand.append((table.deck.get_new_card()))
 
-    def HUMAN_discard_card(self, table):
+    def HUMAN_discard_card(self, table): # TODO don't print hand
         print("Current player has these cards:")
         self.print_hand()
         input_card = int(input("Which card to discard?"))
@@ -74,15 +76,16 @@ class Player:
 
     def discard_card(self, card, table):
         table.discard.add_to_discard(card)
-        table.tokens.note_tokens -= 1 # TODO Should regain a token. Also check that max tokens isn't exceeded
+        # Regain a note token for discarding
+        table.tokens.increase_note_tokens()
 
     def HUMAN_give_colour_hint(self, table):
         selected_player = self.HUMAN_player_selector(table)
         selected_colour = self.HUMAN_colour_selector(table)
-        self.give_colour_hint(selected_player, selected_colour)
+        self.give_colour_hint(selected_player, selected_colour, table)
 
 
-    def give_colour_hint(self, player, colour):
+    def give_colour_hint(self, player, colour, table):
         cards_indices = []
         index = 0
         for card in player.hand:
@@ -90,18 +93,19 @@ class Player:
                 cards_indices.append(index)
             index += 1
         # For now, hints are just 'announced' as prints
-        print("Player " + str(player.playerID) + ", you have the colour " + colour, end="")
+        print("Player " + str(player.playerID) + ", you have the colour " + str(colour), end="")
         if not cards_indices:
             print(" nowhere.")
         else:
             print(" at card indices " + str(cards_indices))
+        table.tokens.decrease_note_tokens()
 
     def HUMAN_give_value_hint(self, table):
         selected_player = self.HUMAN_player_selector(table)
         selected_value = self.HUMAN_value_selector(table)
-        self.give_value_hint(selected_player, selected_value)
+        self.give_value_hint(selected_player, selected_value, table)
 
-    def give_value_hint(self, player, value):
+    def give_value_hint(self, player, value, table):
         cards_indices = []
         index = 0
         for card in player.hand:
@@ -114,6 +118,27 @@ class Player:
             print(" nowhere.")
         else:
             print(" at card indices " + str(cards_indices))
+        table.tokens.decrease_note_tokens()
+
+    def HUMAN_pick_action(self, table):
+        print("Player " + str(self.playerID) + ", pick an action:")
+        input_action = int(
+            input("Give a colour hint (0), give a value hint (1), discard a card (2) or play a card (3)"))
+
+        # Why are there not switch statements, Python..?
+
+        if input_action is 0 and table.tokens.note_tokens > 0:
+            self.HUMAN_give_colour_hint(table)
+        elif input_action is 1 and table.tokens.note_tokens > 0:
+            self.HUMAN_give_value_hint(table)
+        elif input_action is 2:
+            self.HUMAN_discard_card(table)
+        elif input_action is 3:
+            self.HUMAN_play_card(table)
+        else:
+            print("Invalid input or illegal move, try again...")
+            self.HUMAN_pick_action(table)
+
 
     # TODO # Player actions
     #def give_hint:

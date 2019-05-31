@@ -31,8 +31,12 @@ class Deck:
 
     # For drawing a card from the deck. Randomized, so no need to shuffle the deck.
     def get_new_card(self):
-        # Remove a card from the deck at a random location, and returns is
-        return self.deck_contents.pop(random.randint(0, len(self.deck_contents) - 1))
+        # Check if there are still cards in the deck
+        if self.deck_contents:
+            # Remove a card from the deck at a random location, and returns is
+            return self.deck_contents.pop(random.randint(0, len(self.deck_contents) - 1))
+        else:
+            return [] # TODO not sure if this works.
 
 
 class Discard:
@@ -51,3 +55,17 @@ class Tokens:
 
         # Storm tokens are basically lives. Run out and the game ends.
         self.storm_tokens = 3
+
+    def increase_note_tokens(self):
+        if self.note_tokens < self.max_note_tokens:
+            self.note_tokens += 1
+            print("Note token earned. ", end='')
+            self.print_tokens()
+
+    def decrease_note_tokens(self):
+        self.note_tokens -= 1
+        print("Note token used. ", end='')
+        self.print_tokens()
+
+    def print_tokens(self):
+        print("Note tokens left: " + str(self.note_tokens) + ". Storm tokens left: " + str(self.storm_tokens))
