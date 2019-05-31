@@ -6,15 +6,15 @@ i+-*                => any next/previous player
 
 For strategy x assume situation in all strategies 0...x-1 are not true
 
-Strategy 0 : If there are no cards played and i has a card with rank 1 in hand and it knows that it has a card with rank 1 in hand, play that card.
-Strategy 1 : If i has a playable card in hand and it knows that it has a playable card in hand, play that card.
-Strategy 2a: If there is an available hint token and i+1 has a non-playable rainbow card in hand and it knows that this is a playable card, give a hint about the suit that is not the suit of that card (according to i+1's knowledge).
-Strategy 3a: If there is an available hint token and i+1 has a playable card in hand and it does not know that it has a playable card in hand but knows the suit of the playable card, give hint about the rank of the playable card.
-Strategy 3b: If there is an available hint token and i+1 has a playable card in hand and it does not know that it has a playable card in hand but knows the rank of the playable card, give hint about the suit of the playable card.
-Strategy 4 : If there is an available hint token and i+2 has a playable card in hand and it does not know that it has a playable card in hand and does not know the rank or suit of the card, give a hint about either the suit or rank of the card.
-Strategy 5 : If i has a card in hand that has already been played and it knows that card, discard that card.
-Strategy 6 : If there is an available hint token and i+* has a card with rank 5 in hand and it does not know it has a card of rank 5 in hand, give a hint about the rank of that card.
-Strategy 7 : If i has a non-playable card with suit x and rank y and it knows that this is not the only card with suit x and rank y in the game, discard that card.
+Strategy 0: If there are no cards played and i has a card with rank 1 in hand and it knows that it has a card with rank 1 in hand, play that card.
+Strategy 1: If i has a playable card in hand and it knows that it has a playable card in hand, play that card.
+Strategy 2: If there is an available hint token and i+1 has a non-playable rainbow card in hand and it knows that this is a playable card, give a hint about the suit that is not the suit of that card (according to i+1's knowledge).
+Strategy 3: If there is an available hint token and i+1 has a playable card in hand and it does not know that it has a playable card in hand but knows the suit of the playable card, give hint about the rank of the playable card.
+Strategy 4: If there is an available hint token and i+1 has a playable card in hand and it does not know that it has a playable card in hand but knows the rank of the playable card, give hint about the suit of the playable card.
+Strategy 5: If there is an available hint token and i+2 has a playable card in hand and it does not know that it has a playable card in hand and does not know the rank or suit of the card, give a hint about either the suit or rank of the card.
+Strategy 6: If i has a card in hand that has already been played and it knows that card, discard that card.
+Strategy 7: If there is an available hint token and i+* has a card with rank 5 in hand and it does not know it has a card of rank 5 in hand, give a hint about the rank of that card.
+Strategy 8: If i has a non-playable card with suit x and rank y and it knows that this is not the only card with suit x and rank y in the game, discard that card.
 
 Special knowledge updates w.r.t. rainbow cards:
 Update 1: If i-* hints a suit of a card and another i-* hints a different suit of that same card, that card is a rainbow card.
