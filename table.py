@@ -13,7 +13,7 @@ class Table:
 
         self.player_list = []
         for i in range(gameSettings.player_amount):
-            new_player = player.Player(self.deck)
+            new_player = player.Player(self.deck, i)
             self.player_list.append(new_player)
 
     def print_piles(self):
@@ -31,7 +31,9 @@ class Table:
         if pile_number > 4: # There are only 5 piles
             raise Exception("Illegal move: pile " + str(pile_number) + " doesn't exist.")
         if len(self.play_area[pile_number]) + 1 != card.value:
-            raise Exception("Illegal move: can't place value " + str(card.value) +
+            print("Illegal move: can't place value " + str(card.value) +
                             " on index " + str(len(self.play_area[pile_number])) + " of the pile.")
+            self.tokens.storm_tokens -= 1
+            print("Storm token deducted")
         self.play_area[pile_number].append(card)
 
