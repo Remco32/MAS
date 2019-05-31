@@ -13,8 +13,7 @@ Strategy 2a: If there is an available hint token and i+1 has a non-playable rain
 Strategy 3a: If there is an available hint token i+1 has a playable card in hand and it does not know that it has a playable card in hand but knows the suit of the playable card, give hint about the rank of the playable card.
 Strategy 3b: If there is an available hint token i+1 has a playable card in hand and it does not know that it has a playable card in hand but knows the rank of the playable card, give hint about the suit of the playable card.
 Strategy 4 : If there is an available hint token i+2 has a playable card in hand and it does not know that it has a playable card in hand and does not know the rank or suit of the card, give a hint about either the suit or rank of the card.
-Strategy 5a: If i has a card and it knows that card does not have rank 5, discard that card.
-Strategy 5b: If i has a non-playable card with suit x and rank y and it knows that this is not the only card with suit x and rank y in the game, discard that card.
+Strategy 5 : If i has a non-playable card with suit x and rank y and it knows that this is not the only card with suit x and rank y in the game, discard that card.
 
 Special knowledge updates w.r.t. rainbow cards:
 Update 1: If i-* hints a suit of a card and another i-* hints a different suit of that same card, that card is a rainbow card.
