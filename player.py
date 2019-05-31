@@ -34,14 +34,24 @@ class Player:
 
     def HUMAN_colour_selector(self, table):
         print("Pick a colour: ", end='')
-        for colour in table.deck.colours_in_game:
-            print(colour, end=' ')
+        #for colour in table.deck.colours_in_game:
+        #    print(colour, end=' ')
         selected_colour = str(input())
         if selected_colour not in table.deck.colours_in_game:
             print("Invalid colour, try again...")
             self.HUMAN_colour_selector(table)
         else:
             return str(selected_colour)
+
+    def HUMAN_value_selector(self, table):
+        print("Pick a value (1-5): ", end='')
+
+        selected_value = int(input())
+        if not (5 >= int(selected_value) > 0):
+            print("Invalid value, try again...")
+            self.HUMAN_value_selector(table)
+        else:
+            return selected_value
 
 
     def HUMAN_play_card(self, table):
@@ -81,6 +91,25 @@ class Player:
             index += 1
         # For now, hints are just 'announced' as prints
         print("Player " + str(player.playerID) + ", you have the colour " + colour, end="")
+        if not cards_indices:
+            print(" nowhere.")
+        else:
+            print(" at card indices " + str(cards_indices))
+
+    def HUMAN_give_value_hint(self, table):
+        selected_player = self.HUMAN_player_selector(table)
+        selected_value = self.HUMAN_value_selector(table)
+        self.give_value_hint(selected_player, selected_value)
+
+    def give_value_hint(self, player, value):
+        cards_indices = []
+        index = 0
+        for card in player.hand:
+            if card.value == value:
+                cards_indices.append(index)
+            index += 1
+        # For now, hints are just 'announced' as prints
+        print("Player " + str(player.playerID) + ", you have the value " + str(value), end="")
         if not cards_indices:
             print(" nowhere.")
         else:
