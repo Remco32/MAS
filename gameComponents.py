@@ -17,13 +17,13 @@ class Card:
 class Deck:
     def __init__(self):
 
-        colours = ['red', 'yellow', 'green', 'blue', 'white']
+        self.colours_in_game = ['red', 'yellow', 'green', 'blue', 'white']
         if gameSettings.use_rainbow_card:
-            colours.append('rainbow')
+            self.colours_in_game.append('rainbow')
         values = [1, 1, 1, 2, 2, 3, 3, 4, 4, 5]
 
         # Generate deck
-        self.deck_contents = [Card(c, v) for c in colours for v in values]
+        self.deck_contents = [Card(c, v) for c in self.colours_in_game for v in values]
 
         # Set IDs
         for i in range(len(self.deck_contents)):
