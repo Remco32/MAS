@@ -13,9 +13,9 @@ def gameloop(table):
             print("Game won. All piles filled correctly. 25 points are earned!")
             break
         if table.check_end_conditions() == 2:
-            print("Final round!")
+            print("The deck is empty. Final round!")
             final_round(table)
-            table.count_points()
+            print(str(table.count_points()) + " points were earned this game.")
             break
 
         table.pass_turn()
@@ -28,5 +28,5 @@ def final_round(table):
         table.pass_turn()
 
 
-table = table.Table()
-gameloop(table)
+#table = table.Table()
+#gameloop(table)

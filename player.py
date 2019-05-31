@@ -30,7 +30,11 @@ class Player:
             #print("Player " + str(player.playerID) + ": " + str(player.print_hand()))
                 player.print_hand(player.playerID)
         input_player = int(input("Which player to pick?"))
-        return table.player_list[input_player]
+        if table.player_list[input_player] is self:
+            print("You can't pick yourself.")
+            self.HUMAN_player_selector(table)
+        else:
+            return table.player_list[input_player]
 
     def HUMAN_colour_selector(self, table):
         print("Pick a colour: ", end='')
@@ -55,9 +59,11 @@ class Player:
 
 
     def HUMAN_play_card(self, table):
-        print("Current player has these cards:")
-        self.print_hand()
-        input_card = int(input("Which card to play?"))
+        if gameSettings.show_own_hand:
+            print("Current player has these cards:")
+            self.print_hand()
+        print("Current player has " + str(len(self.hand)) + " cards")
+        input_card = int(input("Which card to play? (0-" + str(len(self.hand)-1) + ")"))
         table.print_piles()
         input_pile = int(input("Which pile to play to?"))
         self.play_card(self.hand[input_card], table, input_pile)
@@ -65,19 +71,27 @@ class Player:
     def play_card(self, card, table, pile_number):
         table.place_card(card, pile_number)
         self.hand.remove(card)
-        # Take new card
-        self.hand.append((table.deck.get_new_card()))
+        # Take new card, if possible
+        new_card = table.deck.get_new_card()
+        if new_card is not None:
+            self.hand.append(new_card)
 
-    def HUMAN_discard_card(self, table): # TODO don't print hand
-        print("Current player has these cards:")
-        self.print_hand()
-        input_card = int(input("Which card to discard?"))
+    def HUMAN_discard_card(self, table):
+        if gameSettings.show_own_hand:
+            print("Current player has these cards:")
+            self.print_hand()
+        print("Current player has " + str(len(self.hand)) + " cards")
+        input_card = int(input("Which card to discard? (0-" + str(len(self.hand)-1) + ")"))
         self.discard_card(input_card, table)
 
     def discard_card(self, card, table):
         table.discard.add_to_discard(card)
-        # Regain a note token for discarding
+        # Regain a note, if possible token for discarding
         table.tokens.increase_note_tokens()
+        # Take new card, if possible
+        new_card = table.deck.get_new_card()
+        if new_card is not None:
+            self.hand.append(new_card)
 
     def HUMAN_give_colour_hint(self, table):
         selected_player = self.HUMAN_player_selector(table)
@@ -125,7 +139,7 @@ class Player:
         input_action = int(
             input("Give a colour hint (0), give a value hint (1), discard a card (2) or play a card (3)"))
 
-        # Why are there not switch statements, Python..?
+        # Why are there no switch statements, Python..?
 
         if input_action is 0 and table.tokens.note_tokens > 0:
             self.HUMAN_give_colour_hint(table)
@@ -138,11 +152,5 @@ class Player:
         else:
             print("Invalid input or illegal move, try again...")
             self.HUMAN_pick_action(table)
-
-
-    # TODO # Player actions
-    #def give_hint:
-
-
 
 

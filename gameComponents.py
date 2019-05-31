@@ -36,7 +36,7 @@ class Deck:
             # Remove a card from the deck at a random location, and returns is
             return self.deck_contents.pop(random.randint(0, len(self.deck_contents) - 1))
         else:
-            return [] # TODO not sure if this works.
+            return None # TODO not sure if this works.
 
 
 class Discard:

@@ -34,12 +34,19 @@ class Table:
         if pile_number > 4: # There are only 5 piles
             raise Exception("Illegal move: pile " + str(pile_number) + " doesn't exist.")
         if len(self.play_area[pile_number]) + 1 != card.value:
-            print("Illegal move: can't place value " + str(card.value) +
+            print("Can't place value " + str(card.value) +
                             " on index " + str(len(self.play_area[pile_number])) + " of the pile.")
             self.tokens.storm_tokens -= 1
             print("Storm token deducted")
             self.tokens.print_tokens()
             return
+        if len(self.play_area[pile_number]) > 0:
+            if self.play_area[pile_number][0].colour != card.colour:
+                print("Wrong colour placed on this pile.")
+                self.tokens.storm_tokens -= 1
+                print("Storm token deducted")
+                self.tokens.print_tokens()
+                return
         self.play_area[pile_number].append(card)
         # Bonus scoring
         if self.play_area[pile_number] == 5:
@@ -51,7 +58,7 @@ class Table:
         if self.tokens.storm_tokens <= 0:
             return -1
         # All piles filled correctly
-        if len(self.play_area[0:4]) == 25:
+        if self.count_points() == 25:
             return 1
         if len(self.deck.deck_contents) == 0:
             return 2
