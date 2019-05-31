@@ -1,0 +1,10 @@
+Syntax:
+i   => current player
+i+# => next player in # turns
+
+For strategy x assume situation in all strategies 1...x-1 are not true
+
+Strategy 1: If i has a playable card in hand and it knows that it has a playable card in hand, play that card.
+Strategy 2a: If i+1 has a playable card in hand and it does not know that it has a playable card in hand but knows the suit of the playable card, give hint about the rank of the playable card
+Strategy 2b: If i+1 has a playable card in hand and it does not know that it has a playable card in hand but knows the rank of the playable card, give hint about the suit of the playable card
+Strategy 3: If i+2 has a playable card in hand and it does not know that it has a playable card in hand and does not know the rank or suit of the card, give a hint about either the suit or rank of the card
