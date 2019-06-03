@@ -1,5 +1,5 @@
 import table
-
+#TODO keep indices the same when new cards are dealt to the hand (i.e. new card shouldn't be appended to the end of the list
 
 def gameloop(table):
     while True:
@@ -19,6 +19,7 @@ def gameloop(table):
             break
 
         table.pass_turn()
+
 
 def final_round(table):
     # Each player plays once more

@@ -21,9 +21,8 @@ class Deck:
         if gameSettings.use_rainbow_card:
             self.colours_in_game.append('rainbow')
         self.values_in_game = [1, 1, 1, 2, 2, 3, 3, 4, 4, 5]
-
-        # Generate deck
-        self.deck_contents = [Card(c, v) for c in self.colours_in_game for v in self.values_in_game]
+        self.deck_contents = []
+        self.generate_deck()
 
         # Set IDs
         for i in range(len(self.deck_contents)):
@@ -37,6 +36,10 @@ class Deck:
             return self.deck_contents.pop(random.randint(0, len(self.deck_contents) - 1))
         else:
             return None
+
+    def generate_deck(self):
+        # Generate deck
+        self.deck_contents = [Card(c, v) for c in self.colours_in_game for v in self.values_in_game]
 
 
 class Discard:

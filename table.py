@@ -13,8 +13,13 @@ class Table:
 
         self.player_list = []
         for i in range(gameSettings.player_amount):
-            new_player = player.Player(self.deck, i)
+            new_player = player.Player(self.deck, i, self)
             self.player_list.append(new_player)
+
+        # Update representation after dealing cards
+        for player_loop in self.player_list:
+            for card in player_loop.hand:
+                self.update_cards_left_representation_other_players(card, player_loop)
 
         self.total_turn_counter = 0
         self.current_player = self.player_list[self.total_turn_counter]
@@ -31,6 +36,8 @@ class Table:
 
     # To place a card on one of the piles in the play area
     def place_card(self, card, pile_number):
+
+        # Cases where you can't play
         if pile_number > 4: # There are only 5 piles
             raise Exception("Illegal move: pile " + str(pile_number) + " doesn't exist.")
         if len(self.play_area[pile_number]) + 1 != card.value:
@@ -47,7 +54,11 @@ class Table:
                 print("Storm token deducted")
                 self.tokens.print_tokens()
                 return
+
+        # Case where you can play
         self.play_area[pile_number].append(card)
+        self.current_player.update_cards_left_representation(self, card)
+
         # Bonus scoring
         if self.play_area[pile_number] == 5:
             self.tokens.increase_note_tokens()
@@ -65,7 +76,7 @@ class Table:
 
     def pass_turn(self):
         self.total_turn_counter += 1
-        next_player = self.total_turn_counter % 3
+        next_player = self.total_turn_counter % gameSettings.player_amount
         self.current_player = self.player_list[next_player]
 
     def count_points(self):
@@ -74,5 +85,7 @@ class Table:
             points += len(self.play_area[pile])
         return points
 
-
-
+    def update_cards_left_representation_other_players(self, card, ignored_player):
+        for player_local in self.player_list:
+            if player_local is not ignored_player:
+                player_local.update_cards_left_representation(self, card)

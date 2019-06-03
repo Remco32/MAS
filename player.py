@@ -2,7 +2,7 @@ import gameSettings
 from array import *
 
 class Player:
-    def __init__(self, deck, playerID):
+    def __init__(self, deck, playerID, table):
         self.hand = []
         self.playerID = playerID
 
@@ -15,7 +15,7 @@ class Player:
             self.hand.append(deck.get_new_card())
 
         # Generate internal representation of the cards that are still in the game
-        self.cards_left_representation = self.generate_cards_left_representation(deck)
+        self.cards_left_representation = self.generate_cards_left_representation(deck, table)
 
     def print_cards_left_representation(self, deck):
         i = 0
@@ -23,16 +23,26 @@ class Player:
         for colour in deck.colours_in_game:
             print(str(colour) + ": " + str(self.cards_left_representation[i]))
             i += 1
+        print()
 
 
-    def generate_cards_left_representation(self, deck):
+    def generate_cards_left_representation(self, deck, table):
+        # Generate data structure
         representation = []
         for colour in deck.colours_in_game:
             sublist = []
             for value in range(1, max(deck.values_in_game)+1):
                 sublist.append(deck.values_in_game.count(value))
-            representation.append([sublist])
+            representation.append(sublist)
         return representation
+
+    def update_cards_left_representation(self, table, card):
+        # Get index of colour of card that has been played
+        index = table.deck.colours_in_game.index(card.colour)
+
+        # Update for value of the card
+        self.cards_left_representation[index][card.value-1] -= 1
+
 
     def print_hand(self, playerID=None):
         i = 0
@@ -91,11 +101,13 @@ class Player:
 
     def play_card(self, card, table, pile_number):
         table.place_card(card, pile_number)
-        self.hand.remove(card)
+        #self.update_cards_left_representation(table, card) # Done in table.py
+        self.hand.remove(card) #TODO move to table.py : in case the card couldn't be played, it shouldn't be removed
         # Take new card, if possible
         new_card = table.deck.get_new_card()
         if new_card is not None:
             self.hand.append(new_card)
+            table.update_cards_left_representation_other_players(new_card, self)
 
     def HUMAN_discard_card(self, table):
         if gameSettings.show_own_hand:
@@ -103,16 +115,20 @@ class Player:
             self.print_hand()
         print("Current player has " + str(len(self.hand)) + " cards")
         input_card = int(input("Which card to discard? (0-" + str(len(self.hand)-1) + ")"))
+        input_card = self.hand[input_card]
         self.discard_card(input_card, table)
 
     def discard_card(self, card, table):
         table.discard.add_to_discard(card)
+        self.update_cards_left_representation(table, card)
+        self.hand.remove(card)
         # Regain a note, if possible token for discarding
         table.tokens.increase_note_tokens()
         # Take new card, if possible
         new_card = table.deck.get_new_card()
         if new_card is not None:
             self.hand.append(new_card)
+            table.update_cards_left_representation_other_players(new_card, self)
 
     def HUMAN_give_colour_hint(self, table):
         selected_player = self.HUMAN_player_selector(table)
