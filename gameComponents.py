@@ -20,10 +20,10 @@ class Deck:
         self.colours_in_game = ['red', 'yellow', 'green', 'blue', 'white']
         if gameSettings.use_rainbow_card:
             self.colours_in_game.append('rainbow')
-        values = [1, 1, 1, 2, 2, 3, 3, 4, 4, 5]
+        self.values_in_game = [1, 1, 1, 2, 2, 3, 3, 4, 4, 5]
 
         # Generate deck
-        self.deck_contents = [Card(c, v) for c in self.colours_in_game for v in values]
+        self.deck_contents = [Card(c, v) for c in self.colours_in_game for v in self.values_in_game]
 
         # Set IDs
         for i in range(len(self.deck_contents)):
@@ -36,7 +36,7 @@ class Deck:
             # Remove a card from the deck at a random location, and returns is
             return self.deck_contents.pop(random.randint(0, len(self.deck_contents) - 1))
         else:
-            return None # TODO not sure if this works.
+            return None
 
 
 class Discard:

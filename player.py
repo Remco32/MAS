@@ -1,4 +1,5 @@
 import gameSettings
+from array import *
 
 class Player:
     def __init__(self, deck, playerID):
@@ -12,6 +13,26 @@ class Player:
         # Draw an additional card when <4 players
         if gameSettings.player_amount < 4:
             self.hand.append(deck.get_new_card())
+
+        # Generate internal representation of the cards that are still in the game
+        self.cards_left_representation = self.generate_cards_left_representation(deck)
+
+    def print_cards_left_representation(self, deck):
+        i = 0
+        print("Values: 1, 2, 3, 4, 5")
+        for colour in deck.colours_in_game:
+            print(str(colour) + ": " + str(self.cards_left_representation[i]))
+            i += 1
+
+
+    def generate_cards_left_representation(self, deck):
+        representation = []
+        for colour in deck.colours_in_game:
+            sublist = []
+            for value in range(1, max(deck.values_in_game)+1):
+                sublist.append(deck.values_in_game.count(value))
+            representation.append([sublist])
+        return representation
 
     def print_hand(self, playerID=None):
         i = 0
@@ -152,5 +173,3 @@ class Player:
         else:
             print("Invalid input or illegal move, try again...")
             self.HUMAN_pick_action(table)
-
-

@@ -3,6 +3,10 @@ import gameFlow as flow
 import gameComponents
 
 
+def play_game(table):
+    flow.gameloop(table)
+
+
 def TEST_completed_piles(table):
     colours_in_game = ['red', 'yellow', 'green', 'blue', 'white']
 
@@ -17,4 +21,5 @@ def TEST_completed_piles(table):
 
 
 table = table.Table()
-TEST_completed_piles(table)
+play_game(table)
+# TEST_completed_piles(table)

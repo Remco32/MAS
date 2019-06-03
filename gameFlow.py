@@ -26,6 +26,8 @@ def final_round(table):
         print()
         table.current_player.HUMAN_pick_action(table)
         table.pass_turn()
+    print()
+    print("Game ended!")
 
 
 #table = table.Table()
