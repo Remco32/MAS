@@ -49,6 +49,6 @@ def TEST_smaller_deck(table):
 
 
 table = table.Table()
-#play_game(table)
-TEST_smaller_deck(table)
+play_game(table)
+#TEST_smaller_deck(table)
 # TEST_completed_piles(table)

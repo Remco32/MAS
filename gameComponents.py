@@ -18,7 +18,10 @@ class Deck:
     def __init__(self):
 
         self.colours_in_game = ['red', 'yellow', 'green', 'blue', 'white']
+        self.colours_in_game = self.colours_in_game[0:gameSettings.suit_amount]
+
         if gameSettings.use_rainbow_card:
+            self.colours_in_game = self.colours_in_game[0:gameSettings.suit_amount-1]
             self.colours_in_game.append('rainbow')
         self.values_in_game = [1, 1, 1, 2, 2, 3, 3, 4, 4, 5]
         self.deck_contents = []
