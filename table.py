@@ -9,7 +9,7 @@ class Table:
         self.deck = gameComponents.Deck()
         self.discard = gameComponents.Discard()
         self.tokens = gameComponents.Tokens()
-        self.play_area = [[] for i in range(5)] # Create 5 empty piles for playing the cards
+        self.play_area = [[] for i in range(gameSettings.suit_amount)] # Create 5 empty piles for playing the cards
 
         self.player_list = []
         for i in range(gameSettings.player_amount):
@@ -38,7 +38,7 @@ class Table:
     def place_card(self, card, pile_number):
 
         # Cases where you can't play
-        if pile_number > 4: # There are only 5 piles
+        if pile_number > len(self.deck.colours_in_game):
             raise Exception("Illegal move: pile " + str(pile_number) + " doesn't exist.")
         if len(self.play_area[pile_number]) + 1 != card.value:
             print("Can't place value " + str(card.value) +

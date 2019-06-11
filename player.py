@@ -97,11 +97,12 @@ class Player:
     def play_card(self, card, table, pile_number):
         table.place_card(card, pile_number)
         #self.update_cards_left_representation(table, card) # Done in table.py
-        self.hand.remove(card) #TODO move to table.py : in case the card couldn't be played, it shouldn't be removed
+        index_card = self.hand.index(card)
+        self.hand[index_card] = None
         # Take new card, if possible
         new_card = table.deck.get_new_card()
         if new_card is not None:
-            self.hand.append(new_card)
+            self.hand[index_card] = new_card
             table.update_cards_left_representation_other_players(new_card, self)
 
     def HUMAN_discard_card(self, table):
@@ -116,13 +117,14 @@ class Player:
     def discard_card(self, card, table):
         table.discard.add_to_discard(card)
         self.update_cards_left_representation(table, card)
-        self.hand.remove(card)
+        index_card = self.hand.index(card)
+        self.hand[index_card] = None
         # Regain a note, if possible token for discarding
         table.tokens.increase_note_tokens()
         # Take new card, if possible
         new_card = table.deck.get_new_card()
         if new_card is not None:
-            self.hand.append(new_card)
+            self.hand[index_card] = new_card
             table.update_cards_left_representation_other_players(new_card, self)
 
     def HUMAN_give_colour_hint(self, table):
