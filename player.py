@@ -140,7 +140,7 @@ class Player:
         cards_indices = []
         index = 0
         for card in player.hand:
-            if card.colour == colour:
+            if card.colour == colour or card.colour == 'rainbow':
                 cards_indices.append(index)
             index += 1
         # For now, hints are just 'announced' as prints
