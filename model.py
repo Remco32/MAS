@@ -21,20 +21,22 @@ class HanabiModel:
     def create_worlds(self):
         worlds = []
         suits = self.deck.colours_in_game
-        ranks = list(set(self.deck.values_in_game))
-        rank_counts = Counter(ranks)
+        ranks = self.deck.values_in_game
 
         # Create each unique card
         cards = []
         for colour in suits:
-            for number in self.deck.values_in_game:
-                cards.append(colour + number)
+            for number in ranks:
+                cards.append(colour + str(number))
 
         # Generate all possible hands
         hands = permutations(cards, gameSettings.hand_size)
 
         # Create worlds
-
+        template_assignment = self.generateTemplateAssignment(suits, ranks)
+        for hand in hands:
+            for card in hand:
+                #TODO implement this
 
         return worlds
 
@@ -54,3 +56,12 @@ class HanabiModel:
                 world_relations
             }
         return relations
+
+    # Generate a template world truth assignment based on the hand size and cards in the game
+    def generateTemplateAssignment(self, suits, ranks):
+        assignment = {}
+        for i in range(0, gameSettings.hand_size):
+            for suit in suits:
+                assignment[str(i)+":"+str(suit)] = False
+            for rank in ranks:
+                assignment[str(i)+":"+str(rank)] = False
