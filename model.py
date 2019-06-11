@@ -3,6 +3,8 @@ from external.mlsolver.mlsolver.kripke import KripkeStructure, World
 from external.mlsolver.mlsolver.formula import Atom, And, Not, Or, Box_a, Box_star
 from gameComponents import Deck
 from collections import Counter
+from itertools import permutations
+import gameSettings
 
 class HanabiModel:
     def __init__(self, deck, players):
@@ -10,60 +12,56 @@ class HanabiModel:
         self.players = players
         self.generate_model()
 
-        knowledge_base = []
-
     def generate_model(self):
         self.worlds = self.create_worlds()
         self.relations = self.set_relations()
-
-        self.relations.update(self.add_reflexive_edges(self.worlds, self.relations))
-        self.relations.update(self.add_symmetric_edges(self.relations))
 
         self.ks = KripkeStructure(self.worlds, self.relations)
 
     def create_worlds(self):
         worlds = []
         suits = self.deck.colours_in_game
-        ranks = list(set(self.deck.values_in_game))
-        rank_counts = Counter(ranks)
+        ranks = self.deck.values_in_game
 
         # Create each unique card
         cards = []
         for colour in suits:
             for number in ranks:
-                cards.append(colour + number)
+                cards.append(colour + str(number))
+
+        # Generate all possible hands
+        hands = permutations(cards, gameSettings.hand_size)
 
         # Create worlds
-        # TODO Find way to iteratively construct each possible world. Also we need to find out if we need to rewrite the model checker to allow numbers for atoms instead of booleans.
+        template_assignment = self.generateTemplateAssignment(suits, ranks)
+        for hand in hands:
+            for card in hand:
+                #TODO implement this
 
         return worlds
 
 
 
     def set_relations(self):
-        relations = []
+        relations = {}
+        # Create relations between all worlds
+        world_relations = {}
+        for origin in self.worlds:
+            for dest in self.worlds:
+                world_relations.add((origin, dest))
+
+        # Set relations for each player
+        for player in self.players:
+            relations[player] = {
+                world_relations
+            }
         return relations
 
-    # Taken from external.mlsolver.mlsolver.model
-    def add_symmetric_edges(relations):
-        """Routine adds symmetric edges to Kripke frame
-        """
-        result = {}
-        for agent, agents_relations in relations.items():
-            result_agents = agents_relations.copy()
-            for r in agents_relations:
-                x, y = r[1], r[0]
-                result_agents.add((x, y))
-            result[agent] = result_agents
-        return result
-
-    def add_reflexive_edges(worlds, relations):
-        """Routine adds reflexive edges to Kripke frame
-        """
-        result = {}
-        for agent, agents_relations in relations.items():
-            result_agents = agents_relations.copy()
-            for world in worlds:
-                result_agents.add((world.name, world.name))
-                result[agent] = result_agents
-        return result
+    # Generate a template world truth assignment based on the hand size and cards in the game
+    def generateTemplateAssignment(self, suits, ranks):
+        assignment = {}
+        for i in range(0, gameSettings.hand_size):
+            for suit in suits:
+                assignment[str(i)+":"+str(suit)] = False
+            for rank in ranks:
+                assignment[str(i)+":"+str(rank)] = False
