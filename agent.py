@@ -1,0 +1,1 @@
+# Agent representing computer player for Hanabi.
