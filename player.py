@@ -6,12 +6,7 @@ class Player:
         self.hand = []
         self.playerID = playerID
 
-        # Draw 4 cards
-        for i in range(4):
-            self.hand.append(deck.get_new_card())
-
-        # Draw an additional card when <4 players
-        if gameSettings.player_amount < 4:
+        for i in range(gameSettings.hand_size):
             self.hand.append(deck.get_new_card())
 
         # Generate internal representation of the cards that are still in the game
