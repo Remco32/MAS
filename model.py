@@ -33,6 +33,7 @@ class HanabiModel:
         hands = permutations(cards, gameSettings.hand_size)
 
         # Create worlds
+        template_assignment = {}
         template_assignment = self.generateTemplateAssignment(suits, ranks)
         for hand in hands:
             assignment = template_assignment.copy()
@@ -68,3 +69,6 @@ class HanabiModel:
                 assignment[str(i) + ":" + str(suit)] = False
             for rank in ranks:
                 assignment[str(i) + ":" + str(rank)] = False
+
+    # Method to resolve announcement in the game
+    # def announce(self, ):
