@@ -27,7 +27,7 @@ class HanabiModel:
         cards = []
         for colour in suits:
             for number in ranks:
-                cards.append(colour + str(number))
+                cards.append([colour, number])
 
         # Generate all possible hands
         hands = permutations(cards, gameSettings.hand_size)
@@ -35,11 +35,14 @@ class HanabiModel:
         # Create worlds
         template_assignment = self.generateTemplateAssignment(suits, ranks)
         for hand in hands:
+            assignment = template_assignment.copy()
+            card_index = 0
             for card in hand:
-                #TODO implement this
-
+                assignment[str(card_index) + ":" + str(card(0))] = True
+                assignment[str(card_index) + ":" + str(card(1))] = True
+                card_index += 1
+            worlds.append(World(str(hand), assignment))
         return worlds
-
 
 
     def set_relations(self):
@@ -62,6 +65,6 @@ class HanabiModel:
         assignment = {}
         for i in range(0, gameSettings.hand_size):
             for suit in suits:
-                assignment[str(i)+":"+str(suit)] = False
+                assignment[str(i) + ":" + str(suit)] = False
             for rank in ranks:
-                assignment[str(i)+":"+str(rank)] = False
+                assignment[str(i) + ":" + str(rank)] = False
