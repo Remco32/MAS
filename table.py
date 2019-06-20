@@ -60,7 +60,8 @@ class Table:
         self.current_player.update_cards_left_representation(self, card)
 
         # Bonus scoring
-        if self.play_area[pile_number] == 5:
+        if self.play_area[pile_number] == max(self.deck.values_in_game)-1:
+            print("Pile completely filled!")
             self.tokens.increase_note_tokens()
 
     # Returns 0 for none, 1 for win, 2 for final round, -1 for loss.
@@ -69,7 +70,7 @@ class Table:
         if self.tokens.storm_tokens <= 0:
             return -1
         # All piles filled correctly
-        if self.count_points() == 25:
+        if self.count_points() == max(self.deck.values_in_game) * len(self.deck.colours_in_game):
             return 1
         if len(self.deck.deck_contents) == 0:
             return 2
