@@ -5,16 +5,16 @@ import player
 import gameSettings
 import model
 import datetime
+from external.mlsolver.mlsolver.kripke import KripkeStructure, World
+from external.mlsolver.mlsolver.formula import Atom, And, Not, Or, Box_a, Box_star
 
 def play_game(table):
     flow.gameloop(table)
 
 
 def TEST_completed_piles(table):
-    colours_in_game = ['red', 'yellow', 'green', 'blue', 'white']
-
     i = -1
-    for colour in colours_in_game:
+    for colour in table.deck.colours_in_game:
         i += 1
         for value in range(1, 6):
             new_card = gameComponents.Card(colour, value)
@@ -53,8 +53,15 @@ def TEST_runtime_model_generation(table):
     print("Time elapsed: " + str(datetime.datetime.now() - start_time ))
     print()
 
+def TEST_model_solver_test(table):
+    modelllll = model.HanabiModel(table.deck, table.player_list)
+    submodel = modelllll.ks.solve(Box_star(And(Atom('0:1'), And(Atom('1:1'), Not(Atom('2:1'))))))
+    print()
+
+
 table = table.Table()
 #play_game(table)
 # TEST_smaller_deck(table)
-# TEST_completed_piles(table)
-TEST_runtime_model_generation(table)
+#TEST_completed_piles(table)
+#TEST_runtime_model_generation(table)
+TEST_model_solver_test(table)

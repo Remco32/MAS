@@ -1,5 +1,4 @@
 import gameSettings
-from array import *
 
 class Player:
     def __init__(self, deck, playerID, table):
@@ -9,17 +8,17 @@ class Player:
         for i in range(gameSettings.hand_size):
             self.hand.append(deck.get_new_card())
 
-        # Generate internal representation of the cards that are still in the game
+        # Generate internal representation of the cards that are still in the game (i.e. not visible for the player)
         self.cards_left_representation = self.generate_cards_left_representation(deck, table)
 
     def print_cards_left_representation(self, deck):
         i = 0
-        print("Values: 1, 2, 3, 4, 5")
+        print("Values: ", end='')
+        print(*range(1, max(deck.values_in_game) + 1))
         for colour in deck.colours_in_game:
             print(str(colour) + ": " + str(self.cards_left_representation[i]))
             i += 1
         print()
-
 
     def generate_cards_left_representation(self, deck, table):
         # Generate data structure
