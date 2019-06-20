@@ -10,6 +10,7 @@ class Player:
 
         # Generate internal representation of the cards that are still in the game (i.e. not visible for the player)
         self.cards_left_representation = self.generate_cards_left_representation(deck, table)
+        self.hand_knowledge = self.generate_hand_knowledge()
 
     def print_cards_left_representation(self, deck):
         i = 0
@@ -30,12 +31,28 @@ class Player:
             representation.append(sublist)
         return representation
 
+    def generate_hand_knowledge(self):
+        hand_knowledge = []
+        rep_copy = []
+        for i in range(len(self.cards_left_representation)):
+            sublist = []
+            for j in range(len(self.cards_left_representation[i])):
+                sublist.append(bool(self.cards_left_representation[i][j]))
+            rep_copy.append(sublist)
+
+        for i in range(0, gameSettings.hand_size):
+            hand_knowledge.append(rep_copy)
+        return hand_knowledge
+
     def update_cards_left_representation(self, table, card):
         # Get index of colour of card that has been played
         index = table.deck.colours_in_game.index(card.colour)
 
         # Update for value of the card
         self.cards_left_representation[index][card.value-1] -= 1
+        if self.cards_left_representation[index][card.value-1] == 0:
+            for hand_cards in range(len(self.hand_knowledge)):
+                self.hand_knowledge[hand_cards][index][card.value-1] = False
 
 
     def print_hand(self, playerID=None):
