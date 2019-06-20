@@ -33,14 +33,13 @@ class HanabiModel:
         hands = permutations(cards, gameSettings.hand_size)
 
         # Create worlds
-        template_assignment = {}
         template_assignment = self.generateTemplateAssignment(suits, ranks)
         for hand in hands:
-            assignment = template_assignment.copy()
+            assignment = template_assignment
             card_index = 0
             for card in hand:
-                assignment[str(card_index) + ":" + str(card(0))] = True
-                assignment[str(card_index) + ":" + str(card(1))] = True
+                assignment[str(card_index) + ":" + str(card[0])] = True
+                assignment[str(card_index) + ":" + str(card[1])] = True
                 card_index += 1
             worlds.append(World(str(hand), assignment))
         return worlds
@@ -49,10 +48,10 @@ class HanabiModel:
     def set_relations(self):
         relations = {}
         # Create relations between all worlds
-        world_relations = {}
+        world_relations = set()
         for origin in self.worlds:
             for dest in self.worlds:
-                world_relations.add((origin, dest))
+                world_relations.add((str(origin), str(dest)))
 
         # Set relations for each player
         for player in self.players:
@@ -69,6 +68,7 @@ class HanabiModel:
                 assignment[str(i) + ":" + str(suit)] = False
             for rank in ranks:
                 assignment[str(i) + ":" + str(rank)] = False
+        return assignment
 
     # Method to resolve announcement in the game
     # def announce(self, ):
