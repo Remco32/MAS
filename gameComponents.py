@@ -23,7 +23,10 @@ class Deck:
         if gameSettings.use_rainbow_card:
             self.colours_in_game = self.colours_in_game[0:gameSettings.suit_amount-1]
             self.colours_in_game.append('rainbow')
-        self.values_in_game = [1, 1, 1, 2, 2, 3, 3, 4, 4, 5]
+        if gameSettings.use_single_cards:
+            self.values_in_game = [1, 2, 3, 4, 5]
+        else:
+            self.values_in_game = [1, 1, 1, 2, 2, 3, 3, 4, 4, 5]
         self.deck_contents = []
         self.generate_deck()
 

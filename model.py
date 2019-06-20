@@ -5,6 +5,7 @@ from gameComponents import Deck
 from collections import Counter
 from itertools import permutations
 import gameSettings
+import copy
 
 class HanabiModel:
     def __init__(self, deck, players):
@@ -35,7 +36,8 @@ class HanabiModel:
         # Create worlds
         template_assignment = self.generateTemplateAssignment(suits, ranks)
         for hand in hands:
-            assignment = template_assignment
+            #assignment = copy.deepcopy(template_assignment)
+            assignment = {}
             card_index = 0
             for card in hand:
                 assignment[str(card_index) + ":" + str(card[0])] = True
@@ -51,13 +53,11 @@ class HanabiModel:
         world_relations = set()
         for origin in self.worlds:
             for dest in self.worlds:
-                world_relations.add((str(origin), str(dest)))
+                world_relations.add((origin.name, dest.name))
 
         # Set relations for each player
         for player in self.players:
-            relations[player] = {
-                world_relations
-            }
+            relations[player] = copy.deepcopy(world_relations)
         return relations
 
     # Generate a template world truth assignment based on the hand size and cards in the game

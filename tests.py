@@ -3,7 +3,8 @@ import gameFlow as flow
 import gameComponents
 import player
 import gameSettings
-
+import model
+import datetime
 
 def play_game(table):
     flow.gameloop(table)
@@ -45,10 +46,15 @@ def TEST_smaller_deck(table):
     table.current_player = table.player_list[table.total_turn_counter]
     flow.gameloop(table)
 
-
-
+def TEST_runtime_model_generation(table):
+    #table = table.Table()
+    start_time = datetime.datetime.now()
+    modellll = model.HanabiModel(table.deck, table.player_list)
+    print("Time elapsed: " + str(datetime.datetime.now() - start_time ))
+    print()
 
 table = table.Table()
-play_game(table)
-#TEST_smaller_deck(table)
+#play_game(table)
+# TEST_smaller_deck(table)
 # TEST_completed_piles(table)
+TEST_runtime_model_generation(table)
