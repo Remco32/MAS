@@ -70,5 +70,6 @@ class HanabiModel:
                 assignment[str(i) + ":" + str(rank)] = False
         return assignment
 
-    # Method to resolve announcement in the game
-    # def announce(self, ):
+    # Method to resolve rank announcement in the game
+    def announce(self, player, indices, rank):
+        new_model = self.ks.solve(Box_a(player, ))
