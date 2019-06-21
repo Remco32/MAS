@@ -65,15 +65,15 @@ class Player:
 		print()
 
 	def HUMAN_player_selector(self, table):
-		# print("Available players:")
+		print("Available players (with their hands):")
 		for player in table.player_list:
 			if player is not self:
 				# print("Player " + str(player.playerID) + ": " + str(player.print_hand()))
 				player.print_hand(player.playerID)
+		print()
 
 		while True:
-			input_player = input("Which player to pick?")
-
+			input_player = input("Which player to pick? ")
 			if input_player.isdigit():
 				input_player = int(input_player)
 				if not input_player < 0 and not input_player > gameSettings.player_amount - 1:
@@ -88,24 +88,26 @@ class Player:
 
 	def HUMAN_colour_selector(self, table):
 		print("Pick a colour: ", end='')
-		# for colour in table.deck.colours_in_game:
-		#    print(colour, end=' ')
+		#table.deck.print_colours_in_game()
 		selected_colour = str(input())
-		if selected_colour not in table.deck.colours_in_game:
+		if selected_colour not in table.deck.colours_in_game or selected_colour is 'rainbow':
 			print("Invalid colour, try again...")
 			self.HUMAN_colour_selector(table)
 		else:
 			return str(selected_colour)
 
 	def HUMAN_value_selector(self, table):
-		print("Pick a value (1-5): ", end='')
-
-		selected_value = int(input())
-		if not (5 >= int(selected_value) > 0):
-			print("Invalid value, try again...")
-			self.HUMAN_value_selector(table)
-		else:
-			return selected_value
+		while True:
+			print("Pick a value (1-" + str(max(table.deck.values_in_game)) + "): ", end='')
+			selected_value = input()
+			if selected_value.isdigit():
+				selected_value = int(selected_value)
+				if not (max(table.deck.values_in_game) >= selected_value > 0):
+					print("Invalid value.")
+				else:
+					return selected_value
+			else:
+				print("Please enter a digit.")
 
 
 	def HUMAN_play_card(self, table):
