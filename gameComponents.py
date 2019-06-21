@@ -47,6 +47,19 @@ class Deck:
         # Generate deck
         self.deck_contents = [Card(c, v) for c in self.colours_in_game for v in self.values_in_game]
 
+    def print_colours_in_game(self):
+        print("(", end='')
+        for colour in self.colours_in_game:
+
+            if not self.colours_in_game[-1] == colour:
+                print(colour, end=", ")
+                if colour is 'rainbow':
+                    print(")")
+                else:
+                    print(colour + ")")
+
+
+
 
 class Discard:
     def __init__(self):

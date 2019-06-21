@@ -136,9 +136,18 @@ class Player:
 			print("Current player has these cards:")
 			self.print_hand()
 		print("Current player has " + str(len(self.hand)) + " cards")
-		input_card = int(input("Which card to discard? (0-" + str(len(self.hand)-1) + ")"))
-		input_card = self.hand[input_card]
-		self.discard_card(input_card, table)
+
+		while True:
+			input_card = input("Which card to discard? (0-" + str(len(self.hand) - 1) + ")")
+			if input_card.isdigit():
+				input_card = int(input_card)
+				if not input_card < 0 and not input_card > int(len(self.hand) - 1):
+					self.discard_card(self.hand[input_card], table)
+					return
+				else:
+					print("Invalid value.")
+			else:
+				print("Please enter a digit.")
 
 	def discard_card(self, card, table):
 		table.discard.add_to_discard(card)
