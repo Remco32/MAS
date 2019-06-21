@@ -12,7 +12,7 @@ class Player:
         # Generate internal representation of the cards that are still in the game (i.e. not visible for the player)
         self.cards_left_representation = self.generate_cards_left_representation(deck, table)
         self.hand_knowledge = [None] * gameSettings.hand_size
-        self.generate_hand_knowledge()
+        self.update_hand_knowledge()
 
     def print_cards_left_representation(self, deck):
         i = 0
@@ -33,10 +33,6 @@ class Player:
             representation.append(sublist)
         return representation
 
-    def generate_hand_knowledge(self):
-        for i in range(0, gameSettings.hand_size):
-            self.update_card_knowledge(i)
-
     def update_cards_left_representation(self, table, card):
         # Get index of colour of card that has been played
         index = table.deck.colours_in_game.index(card.colour)
@@ -45,18 +41,19 @@ class Player:
         self.cards_left_representation[index][card.value - 1] -= 1
 
     # Update the knowledge about a certain card at a given index
-    def update_card_knowledge(self, index):
-        rep_copy = []
-        for i in range(len(self.cards_left_representation)):
-            sublist = []
-            for j in range(len(self.cards_left_representation[i])):
-                value = self.cards_left_representation[i][j]
-                if value == 0:
-                    sublist.append(0)
-                else:
-                    sublist.append(1)
-            rep_copy.append(sublist)
-        self.hand_knowledge[index] = rep_copy
+    def update_hand_knowledge(self):
+        for index in range(gameSettings.hand_size):
+            rep_copy = []
+            for i in range(len(self.cards_left_representation)):
+                sublist = []
+                for j in range(len(self.cards_left_representation[i])):
+                    value = self.cards_left_representation[i][j]
+                    if value == 0:
+                        sublist.append(0)
+                    else:
+                        sublist.append(1)
+                rep_copy.append(sublist)
+            self.hand_knowledge[index] = rep_copy
 
     def print_hand(self, playerID=None):
         i = 0
@@ -227,7 +224,6 @@ class Player:
         if new_card is not None:
             self.hand[index_card] = new_card
             table.update_cards_left_representation_other_players(new_card, self)
-            self.update_card_knowledge(index_card)
 
     def HUMAN_discard_card(self, table):
         if gameSettings.show_own_hand:
@@ -259,7 +255,6 @@ class Player:
         if new_card is not None:
             self.hand[index_card] = new_card
             table.update_cards_left_representation_other_players(new_card, self)
-            self.update_card_knowledge(index_card)
 
     def HUMAN_give_colour_hint(self, table):
         selected_player = self.HUMAN_player_selector(table)
