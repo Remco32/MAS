@@ -1,5 +1,6 @@
 import gameSettings
 
+
 class Player:
 	def __init__(self, deck, playerID, table):
 		self.hand = []
@@ -26,7 +27,7 @@ class Player:
 		representation = []
 		for colour in deck.colours_in_game:
 			sublist = []
-			for value in range(1, max(deck.values_in_game)+1):
+			for value in range(1, max(deck.values_in_game) + 1):
 				sublist.append(deck.values_in_game.count(value))
 			representation.append(sublist)
 		return representation
@@ -49,11 +50,10 @@ class Player:
 		index = table.deck.colours_in_game.index(card.colour)
 
 		# Update for value of the card
-		self.cards_left_representation[index][card.value-1] -= 1
-		if self.cards_left_representation[index][card.value-1] == 0:
+		self.cards_left_representation[index][card.value - 1] -= 1
+		if self.cards_left_representation[index][card.value - 1] == 0:
 			for hand_cards in range(len(self.hand_knowledge)):
-				self.hand_knowledge[hand_cards][index][card.value-1] = False
-
+				self.hand_knowledge[hand_cards][index][card.value - 1] = False
 
 	def print_hand(self, playerID=None):
 		i = 0
@@ -88,9 +88,9 @@ class Player:
 
 	def HUMAN_colour_selector(self, table):
 		print("Pick a colour: ", end='')
-		#table.deck.print_colours_in_game()
+		# table.deck.print_colours_in_game()
 		selected_colour = str(input())
-		if selected_colour not in table.deck.colours_in_game or selected_colour is 'rainbow':
+		if selected_colour not in table.deck.colours_in_game or selected_colour == 'rainbow':
 			print("Invalid colour, try again...")
 			self.HUMAN_colour_selector(table)
 		else:
@@ -109,20 +109,19 @@ class Player:
 			else:
 				print("Please enter a digit.")
 
-
 	def HUMAN_play_card(self, table):
 		if gameSettings.show_own_hand:
 			print("Current player has these cards:")
 			self.print_hand()
 		print("Current player has " + str(len(self.hand)) + " cards")
-		input_card = int(input("Which card to play? (0-" + str(len(self.hand)-1) + ")"))
+		input_card = int(input("Which card to play? (0-" + str(len(self.hand) - 1) + ")"))
 		table.print_piles()
 		input_pile = int(input("Which pile to play to?"))
 		self.play_card(self.hand[input_card], table, input_pile)
 
 	def play_card(self, card, table, pile_number):
 		table.place_card(card, pile_number)
-		#self.update_cards_left_representation(table, card) # Done in table.py
+		# self.update_cards_left_representation(table, card) # Done in table.py
 		index_card = self.hand.index(card)
 		self.hand[index_card] = None
 		# Take new card, if possible
@@ -166,7 +165,6 @@ class Player:
 		selected_player = self.HUMAN_player_selector(table)
 		selected_colour = self.HUMAN_colour_selector(table)
 		self.give_colour_hint(selected_player, selected_colour, table)
-
 
 	def give_colour_hint(self, player, colour, table):
 		cards_indices = []
@@ -212,8 +210,7 @@ class Player:
 			if input_action.isdigit():
 				input_action = int(input_action)
 
-			# Why are there no switch statements, Python..?
-
+				# Why are there no switch statements, Python..?
 				if input_action is 0 and table.tokens.note_tokens > 0:
 					self.HUMAN_give_colour_hint(table)
 					break
