@@ -1,6 +1,8 @@
 import table
 
 def gameloop(table):
+    print_welcome_text()
+
     while True:
         print()
         table.current_player.HUMAN_pick_action(table)
@@ -29,6 +31,8 @@ def final_round(table):
     print()
     print("Game ended!")
 
-
-#table = table.Table()
-#gameloop(table)
+def print_welcome_text():
+    print("Welcome to Hanabi!")
+    print("The goal of this game is to create a stack of cards that have the same colour, in ascending order.")
+    print("You can't see your own hand, but can see that of your fellow players.")
+    print("Game settings can be adjusted in gameSettings.py.")

@@ -114,9 +114,33 @@ class Player:
 			print("Current player has these cards:")
 			self.print_hand()
 		print("Current player has " + str(len(self.hand)) + " cards")
-		input_card = int(input("Which card to play? (0-" + str(len(self.hand) - 1) + ")"))
 		table.print_piles()
-		input_pile = int(input("Which pile to play to?"))
+
+		# Card input
+		while True:
+			input_card = input("Which card to play? (0-" + str(len(self.hand) - 1) + ")")
+			if input_card.isdigit():
+				input_card = int(input_card)
+				if not input_card < 0 and not input_card > len(self.hand):
+					break
+				else:
+					print("Please enter a valid digit.")
+			else:
+				print("Please enter a digit.")
+
+		# Pile input
+		while True:
+			input_pile = input("Which pile to play to?")
+			if input_pile.isdigit():
+				input_pile = int(input_pile)
+				if not input_pile < 0 and not input_pile > gameSettings.suit_amount-1:
+					break
+				else:
+					print("Please enter a valid digit.")
+			else:
+				print("Please enter a digit.")
+
+
 		self.play_card(self.hand[input_card], table, input_pile)
 
 	def play_card(self, card, table, pile_number):
