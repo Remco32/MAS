@@ -10,7 +10,8 @@ class Player:
 
         # Generate internal representation of the cards that are still in the game (i.e. not visible for the player)
         self.cards_left_representation = self.generate_cards_left_representation(deck, table)
-        self.hand_knowledge = self.generate_hand_knowledge()
+        self.hand_knowledge = [None] * gameSettings.hand_size
+        self.generate_hand_knowledge()
 
     def print_cards_left_representation(self, deck):
         i = 0
@@ -32,17 +33,8 @@ class Player:
         return representation
 
     def generate_hand_knowledge(self):
-        hand_knowledge = []
-        rep_copy = []
-        for i in range(len(self.cards_left_representation)):
-            sublist = []
-            for j in range(len(self.cards_left_representation[i])):
-                sublist.append(bool(self.cards_left_representation[i][j]))
-            rep_copy.append(sublist)
-
         for i in range(0, gameSettings.hand_size):
-            hand_knowledge.append(rep_copy)
-        return hand_knowledge
+            self.update_card_knowledge(i)
 
     def update_cards_left_representation(self, table, card):
         # Get index of colour of card that has been played
@@ -54,6 +46,16 @@ class Player:
             for hand_cards in range(len(self.hand_knowledge)):
                 self.hand_knowledge[hand_cards][index][card.value-1] = False
 
+    # Update the knowledge about a certain card at a given index
+    def update_card_knowledge(self, index):
+        rep_copy = []
+        for i in range(len(self.cards_left_representation)):
+            sublist = []
+            for j in range(len(self.cards_left_representation[i])):
+                sublist.append(bool(self.cards_left_representation[i][j]))
+            rep_copy.append(sublist)
+        self.hand_knowledge[index] = sublist
+
 
     def print_hand(self, playerID=None):
         i = 0
@@ -63,6 +65,69 @@ class Player:
             print("Card " + str(i) + ": " + str(card.colour) + " " + str(card.value), end=" | ")
             i = i + 1
         print()
+
+    ## CHECKS ##
+
+
+    # Check if the player knows what the card at a given hand index is, and if so, return the colour and rank of that card
+    def knows_card(self, table, index):
+        card = self.hand_knowledge[index]
+        colour = 0
+        rank = 0
+        result = 0
+        for i in range(len(card)):
+            for j in range(len(card[i])):
+                if card[i][j]:
+                    colour = i
+                    rank = j + 1
+                    result += 1
+                    if result > 1:
+                        return None
+        return table.deck.colours_in_game[colour], rank
+
+
+    ## PASSIVE GAME ACTIONS ##
+
+
+    def announce_colour(self, cards_indices, colour, table):
+        announced_colour_index = table.deck.colours_in_game.index(colour)
+        for card_index in range(len(self.hand_knowledge)):
+            card = self.hand_knowledge[card_index]
+            if card_index in cards_indices:
+                # Card with this index is colour or rainbow
+                for colour_index in range(len(card) - 1): # Rainbow is always the final index, no need to change knowledge there
+                    # Set all colours other than the announced one to false
+                    if colour_index != announced_colour_index:
+                        for i in card[colour_index]:
+                            card[colour_index][i] = False
+            else:
+                # Card with this index is not colour or rainbow
+                for colour_index in range(len(card)): # This time include rainbow, because it is no longer a possibility
+                    # Set announced colour and rainbow to false
+                    if colour_index == announced_colour_index or colour_index == len(card) - 1:
+                        for rank in card[colour_index]:
+                            card[colour_index][rank] = False
+
+    def announce_rank(self, cards_indices, value):
+        rank_index = value - 1
+        for card_index in range(len(self.hand_knowledge)):
+            card = self.hand_knowledge[card_index]
+            if card_index in cards_indices:
+                # Card with this index has this rank
+                for colour_index in range(len(card)):
+                    # Set all ranks besides the announced rank to false
+                    for rank in card[colour_index]:
+                        if rank != rank_index:
+                            card[colour_index][rank] = False
+            else:
+                # Card with this index does not have this rank
+                for colour_index in range(len(card)):
+                    # Set announced rank to false
+                    card[colour_index][rank_index] = False
+
+
+
+    ## ACTIVE GAME ACTIONS ##
 
 
     def HUMAN_player_selector(self, table):
@@ -99,7 +164,6 @@ class Player:
         else:
             return selected_value
 
-
     def HUMAN_play_card(self, table):
         if gameSettings.show_own_hand:
             print("Current player has these cards:")
@@ -120,6 +184,7 @@ class Player:
         if new_card is not None:
             self.hand[index_card] = new_card
             table.update_cards_left_representation_other_players(new_card, self)
+            self.update_card_knowledge(index_card)
 
     def HUMAN_discard_card(self, table):
         if gameSettings.show_own_hand:
@@ -142,6 +207,7 @@ class Player:
         if new_card is not None:
             self.hand[index_card] = new_card
             table.update_cards_left_representation_other_players(new_card, self)
+            self.update_card_knowledge(index_card)
 
     def HUMAN_give_colour_hint(self, table):
         selected_player = self.HUMAN_player_selector(table)
@@ -162,6 +228,7 @@ class Player:
             print(" nowhere.")
         else:
             print(" at card indices " + str(cards_indices))
+        player.announce_colour(cards_indices, colour, table)
         table.tokens.decrease_note_tokens()
 
     def HUMAN_give_value_hint(self, table):
@@ -182,6 +249,7 @@ class Player:
             print(" nowhere.")
         else:
             print(" at card indices " + str(cards_indices))
+        player.announce_rank(cards_indices, value)
         table.tokens.decrease_note_tokens()
 
     def HUMAN_pick_action(self, table):
