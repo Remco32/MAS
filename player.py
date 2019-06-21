@@ -46,13 +46,15 @@ class Player:
 
     # Update the knowledge about a certain card at a given index
     def update_card_knowledge(self, index):
-        print("updating hand knowledge at index " + str(index))
         rep_copy = []
         for i in range(len(self.cards_left_representation)):
             sublist = []
             for j in range(len(self.cards_left_representation[i])):
                 value = self.cards_left_representation[i][j]
-                sublist.append(int(value / value))
+                if value == 0:
+                    sublist.append(0)
+                else:
+                    sublist.append(1)
             rep_copy.append(sublist)
         self.hand_knowledge[index] = rep_copy
 
@@ -89,13 +91,12 @@ class Player:
         announced_colour_index = table.deck.colours_in_game.index(colour)
         for card_index in range(len(self.hand_knowledge)):
             card = self.hand_knowledge[card_index]
-            if cards_indices is not None or card_index in cards_indices:
+            if cards_indices is not None and card_index in cards_indices:
                 # Card with this index is colour or rainbow
-                for colour_index in range(
-                        len(card) - 1):  # Rainbow is always the final index, no need to change knowledge there
+                for colour_index in range(len(card) - 1):  # Rainbow is always the final index, no need to change knowledge there
                     # Set all colours other than the announced one to false
                     if colour_index != announced_colour_index:
-                        for i in card[colour_index]:
+                        for i in range(len(card[colour_index])):
                             card[colour_index][i] *= 0
             else:
                 # Card with this index is not colour or rainbow
@@ -103,18 +104,18 @@ class Player:
                         len(card)):  # This time include rainbow, because it is no longer a possibility
                     # Set announced colour and rainbow to false
                     if colour_index == announced_colour_index or colour_index == len(card) - 1:
-                        for rank in card[colour_index]:
+                        for rank in range(len(card[colour_index])):
                             card[colour_index][rank] *= 0
 
     def announce_rank(self, cards_indices, value):
         rank_index = value - 1
         for card_index in range(len(self.hand_knowledge)):
             card = self.hand_knowledge[card_index]
-            if cards_indices is not None or card_index in cards_indices:
+            if cards_indices is not None and card_index in cards_indices:
                 # Card with this index has this rank
                 for colour_index in range(len(card)):
                     # Set all ranks besides the announced rank to false
-                    for rank in card[colour_index]:
+                    for rank in range(len(card[colour_index])):
                         if rank != rank_index:
                             card[colour_index][rank] *= 0
             else:
