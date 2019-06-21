@@ -90,4 +90,4 @@ class Tokens:
         self.print_tokens()
 
     def print_tokens(self):
-        print("Note tokens left: " + str(self.note_tokens) + ". Storm tokens left: " + str(self.storm_tokens))
+        print("Note tokens left: " + str(self.note_tokens) + "/" + str(self.max_note_tokens) + ". Storm tokens left: " + str(self.storm_tokens) + "/3.")

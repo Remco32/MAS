@@ -32,7 +32,11 @@ def final_round(table):
     print("Game ended!")
 
 def print_welcome_text():
-    print("Welcome to Hanabi!")
-    print("The goal of this game is to create a stack of cards that have the same colour, in ascending order.")
+    print("Welcome to Hanabi! To adjust game settings, please edit gameSettings.py.")
+    print("The goal of this game is to create a stacks of cards that have the same colour, in ascending order.")
     print("You can't see your own hand, but can see that of your fellow players.")
-    print("Game settings can be adjusted in gameSettings.py.")
+    print("You can gather information about your hand by receiving hints."
+          "Giving a hint costs one note token. One note token is replenished when a player discards a card.")
+    print("When trying to play an invalid card, a storm token gets deducted."
+          "When all storm tokens are gone, the game ends and the players lose.")
+    print("To game otherwise ends when no more cards are in the game, or all stacks are completed.")

@@ -121,7 +121,7 @@ class Player:
 			input_card = input("Which card to play? (0-" + str(len(self.hand) - 1) + ")")
 			if input_card.isdigit():
 				input_card = int(input_card)
-				if not input_card < 0 and not input_card > len(self.hand):
+				if not input_card < 0 and not input_card > len(self.hand)-1:
 					break
 				else:
 					print("Please enter a valid digit.")
@@ -242,8 +242,11 @@ class Player:
 					self.HUMAN_give_value_hint(table)
 					break
 				elif input_action is 2:
-					self.HUMAN_discard_card(table)
-					break
+					if table.tokens.note_tokens < table.tokens.max_note_tokens:
+						self.HUMAN_discard_card(table)
+						break
+					else:
+						print("You can't discard: note tokens are maxed out.")
 				elif input_action is 3:
 					self.HUMAN_play_card(table)
 					break
