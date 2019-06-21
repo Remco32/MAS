@@ -205,19 +205,28 @@ class Player:
 
 	def HUMAN_pick_action(self, table):
 		print("Player " + str(self.playerID) + ", pick an action:")
-		input_action = int(
-			input("Give a colour hint (0), give a value hint (1), discard a card (2) or play a card (3)"))
 
-		# Why are there no switch statements, Python..?
+		while True:
+			input_action = input("Give a colour hint (0), give a value hint (1), discard a card (2) or play a card (3)")
 
-		if input_action is 0 and table.tokens.note_tokens > 0:
-			self.HUMAN_give_colour_hint(table)
-		elif input_action is 1 and table.tokens.note_tokens > 0:
-			self.HUMAN_give_value_hint(table)
-		elif input_action is 2:
-			self.HUMAN_discard_card(table)
-		elif input_action is 3:
-			self.HUMAN_play_card(table)
-		else:
-			print("Invalid input or illegal move, try again...")
-			self.HUMAN_pick_action(table)
+			if input_action.isdigit():
+				input_action = int(input_action)
+
+			# Why are there no switch statements, Python..?
+
+				if input_action is 0 and table.tokens.note_tokens > 0:
+					self.HUMAN_give_colour_hint(table)
+					break
+				elif input_action is 1 and table.tokens.note_tokens > 0:
+					self.HUMAN_give_value_hint(table)
+					break
+				elif input_action is 2:
+					self.HUMAN_discard_card(table)
+					break
+				elif input_action is 3:
+					self.HUMAN_play_card(table)
+					break
+				else:
+					print("Invalid input or illegal move, try again...")
+			else:
+				print("Please input a digit.")
