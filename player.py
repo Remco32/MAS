@@ -1,4 +1,5 @@
 import gameSettings
+import strategy
 
 
 class Player:
@@ -93,6 +94,32 @@ class Player:
                     if result > 1:
                         return None
         return table.deck.colours_in_game[colour], rank
+
+    def knows_colour(self, table, index):
+        card = self.hand_knowledge[index]
+        possible_colours = 0
+        colour = 0
+        for i in range(len(card)):
+            if 1 in card:
+                colour = i
+                possible_colours += 1
+                if possible_colours > 1:
+                    return None
+        return table.deck.colours_in_game[colour]
+
+    def knows_rank(self, table, index):
+        card = self.hand_knowledge[index]
+        possible_ranks = 0
+        rank = 0
+        rank_nos = zip(card)
+        for i in range(max(table.deck.values_in_game)):
+            if sum(rank_nos[i]) > 0:
+                rank = i + 1
+                possible_ranks += 1
+                if possible_ranks > 1:
+                    return None
+        return rank
+
 
     ## PASSIVE GAME ACTIONS ##
 

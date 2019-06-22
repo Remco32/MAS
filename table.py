@@ -75,6 +75,17 @@ class Table:
         if len(self.deck.deck_contents) == 0:
             return 2
 
+    # Returns a list of all cards that are currently playable
+    def get_playable_cards(self):
+        playable_cards = []
+        for i in len(self.play_area):
+            if len(self.play_area[i]) > 0:
+                if len(self.play_area[i]) != 5:
+                    playable_cards.append([self.play_area[i][-1].colour, len(self.play_area[i]) + 1])
+            else:
+                playable_cards.append([self.deck.colours_in_game[i], 1])
+        return playable_cards
+
     def pass_turn(self):
         self.total_turn_counter += 1
         next_player = self.total_turn_counter % gameSettings.player_amount
