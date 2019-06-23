@@ -80,7 +80,7 @@ def step_3(player, table):
     target_player = table.player_list[(table.total_turn_counter + 1) % gameSettings.player_amount]
     result = ''
     if table.tokens.note_tokens > 0:
-        playable_cards = table.playable_cards()
+        playable_cards = table.get_playable_cards()
         hand = target_player.hand
         has_target = False
         for target in playable_cards:
@@ -105,7 +105,7 @@ def step_4(player, table):
     target_player = table.player_list[(table.total_turn_counter + 2) % gameSettings.player_amount]
     result = ''
     if table.tokens.note_tokens > 0 and len(gameSettings.player_amount > 2):
-        playable_cards = table.playable_cards()
+        playable_cards = table.get_playable_cards()
         hand = target_player.hand
         has_target = False
         for target in playable_cards:
