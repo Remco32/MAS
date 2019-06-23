@@ -5,7 +5,10 @@ def gameloop(table):
 
     while True:
         print()
-        table.current_player.HUMAN_pick_action(table)
+        if table.player_list.index(table.current_player) is 0:
+            table.current_player.HUMAN_pick_action(table)
+        else:
+            table.current_player.AGENT_pick_action(table)
 
         if table.check_end_conditions() == -1:
             print("Game over, all storm tokens are flipped. 0 points are earned.")

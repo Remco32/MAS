@@ -93,7 +93,7 @@ class Player:
                     result += 1
                     if result > 1:
                         return None
-        return table.deck.colours_in_game[colour], rank
+        return [table.deck.colours_in_game[colour], rank]
 
     def knows_colour(self, table, index):
         card = self.hand_knowledge[index]
@@ -111,7 +111,7 @@ class Player:
         card = self.hand_knowledge[index]
         possible_ranks = 0
         rank = 0
-        rank_nos = zip(card)
+        rank_nos = list(zip(*card))
         for i in range(max(table.deck.values_in_game)):
             if sum(rank_nos[i]) > 0:
                 rank = i + 1
@@ -385,3 +385,45 @@ class Player:
                     print("Invalid input or illegal move, try again...")
             else:
                 print("Please input a digit.")
+
+    def AGENT_pick_action(self, table):
+        print("Player " + str(self.playerID) + " is picking an action.")
+        decision, target_player, result = strategy.make_decision(self, table)
+        # Seconding that switch statement remark this looks so ugly
+        if decision is 0:
+            print("Player " + str(self.playerID) + " will be playing a card.")
+            card = self.hand[result]
+            pile_index = table.deck.colours_in_game.index(card.colour)
+            self.play_card(card, table, pile_index)
+        elif decision is 1:
+            print("Player " + str(self.playerID) + " will be playing a card.")
+            card = self.hand[result]
+            pile_index = table.deck.colours_in_game.index(card.colour)
+            self.play_card(card, table, pile_index)
+        elif decision is 2:
+            print("Player " + str(self.playerID) + " will be giving a rank hint to player " + str(target_player.playerID))
+            self.give_value_hint(target_player, result, table)
+        elif decision is 3:
+            print("Player " + str(self.playerID) + " will be giving a colour hint to player " + str(target_player.playerID))
+            self.give_colour_hint(target_player, result, table)
+        elif decision is 4:
+            print("Player " + str(self.playerID) + " will be giving a hint to player " + str(target_player.playerID))
+            self.give_colour_hint(target_player, result, table)
+        elif decision is 5:
+            print("Player " + str(self.playerID) + " will be giving a hint to player " + str(target_player.playerID))
+            self.give_colour_hint(target_player, result, table)
+        elif decision is 6:
+            print("Player " + str(self.playerID) + " will be discarding a card")
+            card = self.hand[result]
+            self.discard_card(card, table)
+        elif decision is 7:
+            print("Player " + str(self.playerID) + " will be discarding a card")
+            card = self.hand[result]
+            self.discard_card(card, table)
+        elif decision is 80:
+            print("Player " + str(self.playerID) + " will be giving a hint to player " + str(target_player.playerID))
+            self.give_colour_hint(target_player, result, table)
+        elif decision is 81:
+            print("Player " + str(self.playerID) + " will be discarding a card")
+            card = self.hand[result]
+            self.discard_card(card, table)
