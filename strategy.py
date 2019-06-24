@@ -38,7 +38,7 @@ def step_1(player, table):
         for i in range(len(player.hand)):
             card = player.knows_card(table, i)
             if card is not None:
-                if card[0] == target[0] & card[1] == target[1]:
+                if card[0] == target[0] and card[1] == target[1]:
                     found_card = True
                     result = i
     if found_card == False:
@@ -222,12 +222,12 @@ def step_8(player, table):
                 if random.randint(0, 1) == 1:
                     # colour hint
                     colours = []
-                    for card_index in len(player.hand_knowledge):
+                    for card_index in range(len(player.hand_knowledge)):
                         for index in range(len(player.hand_knowledge[card_index])):
                             if sum(player.hand_knowledge[card_index][index]) > 1 and index not in colours:
                                 colours.append(index)
                                 searching_target = False
-                    result = table.deck.colours_in_game[colours[random.randint(0,len(colours))]]
+                    result = table.deck.colours_in_game[colours[random.randint(0,len(colours)-1)]]
                 else:
                     # rank hint
                     ranks = []
@@ -237,7 +237,7 @@ def step_8(player, table):
                             if sum(rank_nos[index]) > 1 and index not in ranks:
                                 searching_target = False
                                 ranks.append(index + 1)
-                    result = ranks[random.randint(0,len(ranks))]
+                    result = ranks[random.randint(0,len(ranks)-1)]
     else:
         # TODO create smarter way to select card to discard i.e. make sure you don't discard something you know you still need
         decision = 81

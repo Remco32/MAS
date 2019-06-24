@@ -124,14 +124,13 @@ class Player:
     ## PASSIVE GAME ACTIONS ##
 
     def announce_colour(self, cards_indices, colour, table):
-        announced_colour_index = table.deck.colours_in_game.index(colour)
         for card_index in range(len(self.hand_knowledge)):
             card = self.hand_knowledge[card_index]
             if cards_indices is not None and card_index in cards_indices:
                 # Card with this index is colour or rainbow
                 for colour_index in range(len(card) - 1):  # Rainbow is always the final index, no need to change knowledge there
                     # Set all colours other than the announced one to false
-                    if colour_index != announced_colour_index:
+                    if colour_index != colour:
                         for i in range(len(card[colour_index])):
                             card[colour_index][i] *= 0
             else:
@@ -139,7 +138,7 @@ class Player:
                 for colour_index in range(
                         len(card)):  # This time include rainbow, because it is no longer a possibility
                     # Set announced colour and rainbow to false
-                    if colour_index == announced_colour_index or colour_index == len(card) - 1:
+                    if colour_index == colour or colour_index == len(card) - 1:
                         for rank in range(len(card[colour_index])):
                             card[colour_index][rank] *= 0
 
@@ -359,6 +358,7 @@ class Player:
         table.tokens.decrease_note_tokens()
 
     def HUMAN_pick_action(self, table):
+
         print("Player " + str(self.playerID) + ", pick an action:")
 
         while True:
@@ -423,7 +423,11 @@ class Player:
             self.discard_card(card, table)
         elif decision is 80:
             print("Player " + str(self.playerID) + " will be giving a hint to player " + str(target_player.playerID))
-            self.give_colour_hint(target_player, result, table)
+            if  isinstance(result, str):
+
+                self.give_colour_hint(target_player, result, table)
+            else:
+                self.give_value_hint(target_player, result, table)
         elif decision is 81:
             print("Player " + str(self.playerID) + " will be discarding a card")
             card = self.hand[result]
