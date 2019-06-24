@@ -8,7 +8,7 @@ def make_decision(player, table):
 # Strategy 0: If there are no cards played and i has a card with rank 1 in hand and it knows that it has a card with rank 1 in hand, play that card.
 # Return self, card index
 def step_0(player, table):
-    if gameSettings.print_agent_debug: print("Check step 0")
+    if gameSettings.DEBUG_print_agent_steps: print("Check step 0")
     decision = 0
     target_player = player
     result = 0
@@ -29,7 +29,7 @@ def step_0(player, table):
 # Strategy 1: If i has a playable card in hand and it knows that it has a playable card in hand, play that card.
 # Return self, card index
 def step_1(player, table):
-    if gameSettings.print_agent_debug: print("Check step 1")
+    if gameSettings.DEBUG_print_agent_steps: print("Check step 1")
     decision = 1
     target_player = player
     result = 0
@@ -51,7 +51,7 @@ def step_1(player, table):
 # about the rank of the playable card.
 # Return player, rank
 def step_2(player, table):
-    if gameSettings.print_agent_debug: print("Check step 2")
+    if gameSettings.DEBUG_print_agent_steps: print("Check step 2")
     decision = 2
     target_player = table.player_list[(table.total_turn_counter + 1) % gameSettings.player_amount]
     result = 0
@@ -75,7 +75,7 @@ def step_2(player, table):
 # about the suit of the playable card.
 # Return player, suit
 def step_3(player, table):
-    if gameSettings.print_agent_debug: print("Check step 3")
+    if gameSettings.DEBUG_print_agent_steps: print("Check step 3")
     decision = 3
     target_player = table.player_list[(table.total_turn_counter + 1) % gameSettings.player_amount]
     result = ''
@@ -109,7 +109,7 @@ def step_3(player, table):
 # a hint about either the suit or rank of the card.
 # Return player, colour/rank
 def step_4(player, table):
-    if gameSettings.print_agent_debug: print("Check step 4")
+    if gameSettings.DEBUG_print_agent_steps: print("Check step 4")
     decision = 4
     target_player = table.player_list[(table.total_turn_counter + 2) % gameSettings.player_amount]
     result = ''
@@ -147,7 +147,7 @@ def step_4(player, table):
 # the rank or colour of that card.
 # Return player, card index
 def step_5(player, table):
-    if gameSettings.print_agent_debug: print("Check step 5")
+    if gameSettings.DEBUG_print_agent_steps: print("Check step 5")
     decision = 5
     found_target = False
     if table.tokens.note_tokens > 0:
@@ -185,7 +185,7 @@ def step_5(player, table):
 # Strategy 6: If i has a card in hand that has already been played and it knows that card, discard that card.
 # Return self, card index
 def step_6(player, table):
-    if gameSettings.print_agent_debug: print("Check step 6")
+    if gameSettings.DEBUG_print_agent_steps: print("Check step 6")
     decision = 6
     target_player = player
     result = 0
@@ -209,7 +209,7 @@ def step_6(player, table):
 # Strategy 7: If i has a non-playable card with suit x and rank y and it knows that this is not the only card with suit x and rank y in the game, discard that card.
 # Return self, card index
 def step_7(player, table):
-    if gameSettings.print_agent_debug: print("Check step 7")
+    if gameSettings.DEBUG_print_agent_steps: print("Check step 7")
     decision = 7
     target_player = player
     result = 0
@@ -231,7 +231,7 @@ def step_7(player, table):
 
 # Strategy 8: If there are hint tokens left, give a random hint. If not, discard a random card
 def step_8(player, table):
-    if gameSettings.print_agent_debug: print("Check step 8")
+    if gameSettings.DEBUG_print_agent_steps: print("Check step 8")
     decision = 8
     target_player = player
     if table.tokens.note_tokens > 0:

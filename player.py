@@ -1,6 +1,6 @@
 import gameSettings
 import strategy
-
+from colorama import Fore, Style
 
 class Player:
     def __init__(self, deck, playerID, table):
@@ -242,7 +242,7 @@ class Player:
                 print("Please enter a digit.")
 
     def HUMAN_play_card(self, table):
-        if gameSettings.show_own_hand:
+        if gameSettings.CHEAT_show_own_hand:
             print("Current player has these cards:")
             self.print_hand()
         print("Current player has " + str(len(self.hand)) + " cards")
@@ -290,7 +290,7 @@ class Player:
             self.update_card_knowledge(index_card)
 
     def HUMAN_discard_card(self, table):
-        if gameSettings.show_own_hand:
+        if gameSettings.CHEAT_show_own_hand:
             print("Current player has these cards:")
             self.print_hand()
         print("Current player has " + str(len(self.hand)) + " cards")
@@ -334,11 +334,15 @@ class Player:
                 cards_indices.append(index)
             index += 1
         # For now, hints are just 'announced' as prints
-        print("[Announcement] Player " + str(player.playerID) + ", you have the colour " + str(colour), end="")
+        print(Fore.BLUE, "[Announcement] Player " + str(player.playerID) + ", you have the colour " + str(colour), end="")
+
+
         if not cards_indices:
             print(" nowhere.")
         else:
             print(" at card indices " + str(cards_indices))
+
+        print(Style.RESET_ALL)
         player.announce_colour(cards_indices, colour, table)
 
         table.tokens.decrease_note_tokens()
@@ -371,11 +375,15 @@ class Player:
                 cards_indices.append(index)
             index += 1
         # For now, hints are just 'announced' as prints
-        print("[Announcement] Player " + str(player.playerID) + ", you have the value " + str(value), end="")
+        print(Fore.BLUE, "[Announcement] Player " + str(player.playerID) + ", you have the value " + str(value), end="")
+
+
         if not cards_indices:
             print(" nowhere.")
         else:
             print(" at card indices " + str(cards_indices))
+
+        print(Style.RESET_ALL)
         player.announce_rank(cards_indices, value)
         table.tokens.decrease_note_tokens()
 
