@@ -318,6 +318,7 @@ class Player:
         table.discard.add_to_discard(card)
         print("Card discarded: ", end='')
         card.print_card()
+        print()
         self.update_cards_left_representation(table, card)
         index_card = self.hand.index(card)
         self.hand[index_card] = None
@@ -433,11 +434,13 @@ class Player:
             card = self.hand[result]
             print("Player " + str(self.playerID) + " will be playing a card: ", end='')
             card.print_card()
+            print()
             self.play_card(card, table)
         elif decision is 1:
             card = self.hand[result]
             print("Player " + str(self.playerID) + " will be playing a card: ", end='')
             card.print_card()
+            print()
             self.play_card(card, table)
         elif decision is 2:
             print("Player " + str(self.playerID) + " will be giving a rank hint to player " + str(target_player.playerID))
@@ -461,11 +464,13 @@ class Player:
             card = self.hand[result]
             print("Player " + str(self.playerID) + " will be discarding a card: ", end='')
             card.print_card()
+            print()
             self.discard_card(card, table)
         elif decision is 7:
             card = self.hand[result]
             print("Player " + str(self.playerID) + " will be discarding a card: ", end='')
             card.print_card()
+            print()
             self.discard_card(card, table)
         elif decision is 80:
             print("Player " + str(self.playerID) + " will be giving a hint to player " + str(target_player.playerID))

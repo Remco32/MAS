@@ -32,6 +32,7 @@ class Table:
             for card in self.play_area[pile]:
                 #print(str(card.colour) + " " + str(card.value), end='; ')
                 card.print_card()
+                print(" ", end='')
             print()
             i = i + 1
         print()
