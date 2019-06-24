@@ -272,5 +272,5 @@ def step_8(player, table):
     else:
         # TODO create smarter way to select card to discard i.e. make sure you don't discard something you know you still need
         decision = 81
-        result = random.randint(0, len(player.hand))
+        result = random.randint(0, len(player.hand) - 1)
     return decision, target_player, result
