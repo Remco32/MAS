@@ -362,21 +362,6 @@ class Player:
         selected_value = self.HUMAN_value_selector(table)
         self.give_value_hint(selected_player, selected_value, table)
 
-        def give_value_hint(self, player, value, table):
-            cards_indices = []
-            index = 0
-            for card in player.hand:
-                if card.value == value:
-                    cards_indices.append(index)
-                index += 1
-            # For now, hints are just 'announced' as prints
-            print("Player " + str(player.playerID) + ", you have the value " + str(value), end="")
-            if not cards_indices:
-                print(" nowhere.")
-            else:
-                print(" at card indices " + str(cards_indices))
-            table.tokens.decrease_note_tokens()
-
     def give_value_hint(self, player, value, table):
         cards_indices = []
         index = 0
@@ -385,14 +370,12 @@ class Player:
                 cards_indices.append(index)
             index += 1
         # For now, hints are just 'announced' as prints
-        if player is table.player_list[0]: # Human player
+        if player is table.player_list[0]:  # Human player
             print(Fore.GREEN, end='')
         else:
             print(Fore.BLUE, end='')
 
-
         print("[Announcement] Player " + str(player.playerID) + ", you have the value " + str(value), end="")
-
 
         if not cards_indices:
             print(" nowhere.")

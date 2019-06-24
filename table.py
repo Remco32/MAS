@@ -30,7 +30,8 @@ class Table:
         for pile in range(len(self.play_area)):
             print("Pile " + str(i) + ": ", end='')
             for card in self.play_area[pile]:
-                print(str(card.colour) + " " + str(card.value), end='; ')
+                #print(str(card.colour) + " " + str(card.value), end='; ')
+                card.print_card()
             print()
             i = i + 1
         print()
