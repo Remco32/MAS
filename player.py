@@ -304,6 +304,9 @@ class Player:
             if input_card.isdigit():
                 input_card = int(input_card)
                 if not input_card < 0 and not input_card > int(len(self.hand) - 1):
+                    print("Discarded card: ", end='')
+                    self.hand[input_card].print_card()
+                    print()
                     self.discard_card(self.hand[input_card], table)
                     return
                 else:
@@ -372,14 +375,12 @@ class Player:
                 cards_indices.append(index)
             index += 1
         # For now, hints are just 'announced' as prints
-        if player is table.player_list[0]: # Human player
+        if player is table.player_list[0]:  # Human player
             print(Fore.GREEN, end='')
         else:
             print(Fore.BLUE, end='')
 
-
         print("[Announcement] Player " + str(player.playerID) + ", you have the value " + str(value), end="")
-
 
         if not cards_indices:
             print(" nowhere.")
