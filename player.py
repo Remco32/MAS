@@ -222,7 +222,7 @@ class Player:
                 print("Please enter a digit.")
 
     def HUMAN_play_card(self, table):
-        if gameSettings.show_own_hand:
+        if gameSettings.CHEAT_show_own_hand:
             print("Current player has these cards:")
             self.print_hand()
         print("Current player has " + str(len(self.hand)) + " cards")
@@ -270,7 +270,7 @@ class Player:
             self.update_card_knowledge(index_card)
 
     def HUMAN_discard_card(self, table):
-        if gameSettings.show_own_hand:
+        if gameSettings.CHEAT_show_own_hand:
             print("Current player has these cards:")
             self.print_hand()
         print("Current player has " + str(len(self.hand)) + " cards")
