@@ -60,10 +60,9 @@ def step_2(player, table):
         has_target = False
         for target in playable_cards:
             for card in hand:
-                if target[0] == card.colour and target[1] == card.value and target_player.knows_card(table, hand.index(card)) is None:
-                    if target_player.knows_colour(table, hand.index(card)) is not None:
-                        has_target = True
-                        result = target[1]
+                if target[0] == card.colour and target[1] == card.value and target_player.knows_rank(table, hand.index(card)) is None:
+                    has_target = True
+                    result = target[1]
         if has_target == False:
             decision, target_player, result = step_3(player, table)
     else:
@@ -85,10 +84,9 @@ def step_3(player, table):
         has_target = False
         for target in playable_cards:
             for card in hand:
-                if target[0] == card.colour and target[1] == card.value and target_player.knows_card(table, hand.index(card)) is None:
-                    if target_player.knows_rank(table, hand.index(card)) is not None:
-                        has_target = True
-                        result = target[0]
+                if target[0] == card.colour and target[1] == card.value and target_player.knows_colour(table, hand.index(card)) is None:
+                    has_target = True
+                    result = target[0]
         if has_target == False:
             decision, target_player, result = step_4(player, table)
     else:
