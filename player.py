@@ -313,6 +313,8 @@ class Player:
 
     def discard_card(self, card, table):
         table.discard.add_to_discard(card)
+        print("Card discarded: ", end='')
+        card.print_card()
         self.update_cards_left_representation(table, card)
         index_card = self.hand.index(card)
         self.hand[index_card] = None
@@ -361,21 +363,6 @@ class Player:
         selected_player = self.HUMAN_player_selector(table)
         selected_value = self.HUMAN_value_selector(table)
         self.give_value_hint(selected_player, selected_value, table)
-
-        def give_value_hint(self, player, value, table):
-            cards_indices = []
-            index = 0
-            for card in player.hand:
-                if card.value == value:
-                    cards_indices.append(index)
-                index += 1
-            # For now, hints are just 'announced' as prints
-            print("Player " + str(player.playerID) + ", you have the value " + str(value), end="")
-            if not cards_indices:
-                print(" nowhere.")
-            else:
-                print(" at card indices " + str(cards_indices))
-            table.tokens.decrease_note_tokens()
 
     def give_value_hint(self, player, value, table):
         cards_indices = []
