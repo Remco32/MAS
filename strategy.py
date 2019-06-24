@@ -148,9 +148,9 @@ def step_4(player, table):
                                     if 1 not in target_player.hand_knowledge[hand.index(card)][potential_colour]:
                                         targets.append(potential_colour)
                                 if len(targets) == 0:
-                                    result = table.deck.colours_in_game[random.randint(0, len(table.deck.colours_in_game) - 1)]
+                                    result = table.deck.colours_in_game[random.randint(0, len(table.deck.colours_in_game) - 2)]
                                 else:
-                                    result = random.choice(targets)
+                                    result = table.deck.colours_in_game[random.randint(0, len(targets) - 1)]
                         elif target_player.knows_colour(table, hand.index(card)) is not None:
                             has_target = True
                             result = target[1]
@@ -169,24 +169,25 @@ def step_5(player, table):
     decision = 5
     found_target = False
     if table.tokens.note_tokens > 0:
-        for target_player in table.player_list:
-            if table.player_list.index(target_player) is not table.player_list.index(player):
-                hand = target_player.hand
+        for check_player in table.player_list:
+            if table.player_list.index(check_player) is not table.player_list.index(player):
+                hand = check_player.hand
                 for card in hand:
                     if card is not None:
                         colour_index = table.deck.colours_in_game.index(card.colour)
                         rank_index = card.value - 1
-                        if player.cards_left_representation[colour_index][rank_index] == 1 and target_player.knows_card(table, hand.index(card)) is None:
+                        if player.cards_left_representation[colour_index][rank_index] == 1 and check_player.knows_card(table, hand.index(card)) is None:
                             found_target = True
-                            if target_player.knows_rank(table, hand.index(card)) is None:
+                            target_player = check_player
+                            if check_player.knows_rank(table, hand.index(card)) is None:
                                 result = card.value
                             else: #target_player.knows_colour(table, hand.index(card)) is None:
                                 if card.colour is not 'rainbow':
                                     result = card.colour
                                 else:
                                     targets = []
-                                    for potential_colour in range(len(target_player.hand_knowledge[hand.index(card)]) - 1):
-                                        if 1 not in target_player.hand_knowledge[hand.index(card)][potential_colour]:
+                                    for potential_colour in range(len(check_player.hand_knowledge[hand.index(card)]) - 1):
+                                        if 1 not in check_player.hand_knowledge[hand.index(card)][potential_colour]:
                                             targets.append(potential_colour)
                                     if len(targets) == 0:
                                         result = random.randint(0, len(table.deck.colours_in_game) - 1)

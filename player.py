@@ -41,6 +41,7 @@ class Player:
                     colours.append(deck.colours_in_game[colour])
             for i in colours:
                 print(i + " ", end='')
+                ranks.sort()
             for j in ranks:
                 print(str(j) + " ", end='')
             print("")
