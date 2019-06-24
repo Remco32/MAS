@@ -85,7 +85,7 @@ def step_3(player, table):
         has_target = False
         for target in playable_cards:
             for card in hand:
-                if target[0] == card.colour and target[1] == card.rank and target_player.knows_card(table, hand.index(card)) is None:
+                if target[0] == card.colour and target[1] == card.value and target_player.knows_card(table, hand.index(card)) is None:
                     if target_player.knows_rank(table, hand.index(card)) is not None:
                         has_target = True
                         result = target[0]
@@ -104,7 +104,7 @@ def step_4(player, table):
     decision = 4
     target_player = table.player_list[(table.total_turn_counter + 2) % gameSettings.player_amount]
     result = ''
-    if table.tokens.note_tokens > 0 and len(gameSettings.player_amount > 2):
+    if table.tokens.note_tokens > 0 and gameSettings.player_amount > 2:
         playable_cards = table.get_playable_cards()
         hand = target_player.hand
         has_target = False
@@ -160,9 +160,9 @@ def step_6(player, table):
     decision = 6
     target_player = player
     result = 0
+    found_card = False
     if table.tokens.note_tokens < table.tokens.max_note_tokens:
         playable_cards = table.get_playable_cards()
-        found_card = False
         for i in range(len(player.hand)):
             card = player.knows_card(table, i)
             if card is not None:
@@ -171,9 +171,9 @@ def step_6(player, table):
                         found_card = True
                         result = i
     else:
-        decision, target_player, result = step_6(player, table)
+        decision, target_player, result = step_7(player, table)
     if found_card == False:
-        decision, target_player, result = step_6(player, table)
+        decision, target_player, result = step_7(player, table)
 
     return decision, target_player, result
 
@@ -186,7 +186,7 @@ def step_7(player, table):
     result = 0
     target_found = False
     if table.tokens.note_tokens < table.tokens.max_note_tokens:
-        for i in range(len.player.hand):
+        for i in range(len(player.hand)):
             card = player.knows_card(table, i)
             if card is not None:
                 rank_index = card[1] + 1

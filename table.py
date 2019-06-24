@@ -35,11 +35,15 @@ class Table:
 
 
     # To place a card on one of the piles in the play area
-    def place_card(self, card, pile_number):
+    def place_card(self, card):
 
         # Cases where you can't play
-        if pile_number > len(self.deck.colours_in_game):
-            raise Exception("Illegal move: pile " + str(pile_number) + " doesn't exist.")
+        #if pile_number > len(self.deck.colours_in_game):
+        #    raise Exception("Illegal move: pile " + str(pile_number) + " doesn't exist.")
+
+        # Select correct pile
+        pile_number = self.deck.colours_in_game.index(card.colour)
+
         if len(self.play_area[pile_number]) + 1 != card.value:
             print("Can't place value " + str(card.value) +
                             " on index " + str(len(self.play_area[pile_number])) + " of the pile.")

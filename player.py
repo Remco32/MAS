@@ -239,6 +239,7 @@ class Player:
             else:
                 print("Please enter a digit.")
 
+        """
         # Pile input
         while True:
             input_pile = input("Which pile to play to?")
@@ -250,11 +251,13 @@ class Player:
                     print("Please enter a valid digit.")
             else:
                 print("Please enter a digit.")
+                """
 
-        self.play_card(self.hand[input_card], table, input_pile)
+        self.play_card(self.hand[input_card], table)
 
-    def play_card(self, card, table, pile_number):
-        table.place_card(card, pile_number)
+
+    def play_card(self, card, table):
+        table.place_card(card)
         # self.update_cards_left_representation(table, card) # Done in table.py
         index_card = self.hand.index(card)
         self.hand[index_card] = None
@@ -393,13 +396,11 @@ class Player:
         if decision is 0:
             print("Player " + str(self.playerID) + " will be playing a card.")
             card = self.hand[result]
-            pile_index = table.deck.colours_in_game.index(card.colour)
-            self.play_card(card, table, pile_index)
+            self.play_card(card, table)
         elif decision is 1:
             print("Player " + str(self.playerID) + " will be playing a card.")
             card = self.hand[result]
-            pile_index = table.deck.colours_in_game.index(card.colour)
-            self.play_card(card, table, pile_index)
+            self.play_card(card, table)
         elif decision is 2:
             print("Player " + str(self.playerID) + " will be giving a rank hint to player " + str(target_player.playerID))
             self.give_value_hint(target_player, result, table)
