@@ -4,6 +4,7 @@
 
 import random
 import gameSettings
+from colorama import Fore, Style
 
 
 class Card:
@@ -80,6 +81,12 @@ class Tokens:
 
         # Storm tokens are basically lives. Run out and the game ends.
         self.storm_tokens = 3
+
+    def decrease_storm_tokens(self):
+        self.storm_tokens -= 1
+        print(Fore.RED, "Storm token deducted")
+        print(Style.RESET_ALL)
+        self.print_tokens()
 
     def increase_note_tokens(self):
         if self.note_tokens < self.max_note_tokens:

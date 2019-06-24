@@ -63,16 +63,12 @@ class Table:
         if len(self.play_area[pile_number]) + 1 != card.value:
             print("Can't place value " + str(card.value) +
                             " on index " + str(len(self.play_area[pile_number])) + " of the pile.")
-            self.tokens.storm_tokens -= 1
-            print("Storm token deducted")
-            self.tokens.print_tokens()
+            self.tokens.decrease_storm_tokens()
             return
         if len(self.play_area[pile_number]) > 0:
             if self.play_area[pile_number][0].colour != card.colour:
                 print("Wrong colour placed on this pile.")
-                self.tokens.storm_tokens -= 1
-                print("Storm token deducted")
-                self.tokens.print_tokens()
+                self.tokens.decrease_storm_tokens()
                 return
 
         # Case where you can play
