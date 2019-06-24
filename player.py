@@ -427,7 +427,7 @@ class Player:
 
     def AGENT_pick_action(self, table):
         # self.print_cards_left_representation(table.deck)
-        if gameSettings.DEBUG_prints_agents: self.print_hand_knowledge_list(table.deck)
+        if gameSettings.DEBUG_print_knowledge_agents: self.print_hand_knowledge_list(table.deck)
         print("Player " + str(self.playerID) + " is picking an action.")
         decision, target_player, result = strategy.make_decision(self, table)
         # Seconding that switch statement remark this looks so ugly
