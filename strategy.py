@@ -108,7 +108,7 @@ def step_4(player, table):
         has_target = False
         for target in playable_cards:
             for card in hand:
-                if target[0] == card.colour and target[1] == card.rank and target_player.knows_card(table, hand.index(card)) is None:
+                if target[0] == card.colour and target[1] == card.value and target_player.knows_card(table, hand.index(card)) is None:
                     if target_player.knows_rank(table, hand.index(card)) is not None:
                         has_target = True
                         result = target[0]
@@ -135,11 +135,11 @@ def step_5(player, table):
                 hand = target_player.hand
                 for card in hand:
                     colour_index = table.deck.colours_in_game.index(card.colour)
-                    rank_index = card.rank - 1
+                    rank_index = card.value - 1
                     if player.cards_left_representation[colour_index][rank_index] == 1 and target_player.knows_card(table, hand.index(card)) is None:
                         found_target = True
                         if target_player.knows_rank(table, hand.index(card)) is None:
-                            result = card.rank
+                            result = card.value
                         elif target_player.knows_colour(table, hand.index(card)) is None:
                             result = card.colour
 
