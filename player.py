@@ -25,7 +25,6 @@ class Player:
         print()
 
     def print_hand_knowledge_list(self, deck):
-        print(self.hand_knowledge)
         print("Player " + str(self.playerID) + " has the following knowledge: ")
         for card in range(len(self.hand_knowledge)):
             print("Card " + str(card) + ": ", end='')
@@ -33,8 +32,8 @@ class Player:
             colours = []
             for colour in range(len(self.hand_knowledge[card])):
                 present = False
-                for rank in self.hand_knowledge[card][colour]:
-                    if rank is 1:
+                for rank in range(len(self.hand_knowledge[card][colour])):
+                    if self.hand_knowledge[card][colour][rank]is 1:
                         present = True
                         if (rank + 1) not in ranks:
                             ranks.append(rank + 1)
@@ -152,15 +151,14 @@ class Player:
                 # Card with this index is colour or rainbow
                 for colour_index in range(len(card) - 1):  # Rainbow is always the final index, no need to change knowledge there
                     # Set all colours other than the announced one to false
-                    if colour_index != colour:
+                    if table.deck.colours_in_game[colour_index] != colour:
                         for i in range(len(card[colour_index])):
                             card[colour_index][i] *= 0
             else:
                 # Card with this index is not colour or rainbow
-                for colour_index in range(
-                        len(card)):  # This time include rainbow, because it is no longer a possibility
+                for colour_index in range(len(card)):  # This time include rainbow, because it is no longer a possibility
                     # Set announced colour and rainbow to false
-                    if colour_index == colour or colour_index == len(card) - 1:
+                    if table.deck.colours_in_game[colour_index] == colour or colour_index == len(card) - 1:
                         for rank in range(len(card[colour_index])):
                             card[colour_index][rank] *= 0
 
@@ -183,6 +181,7 @@ class Player:
 
     ## ACTIVE GAME ACTIONS ##
 
+    """
     def HUMAN_player_selector(self, table):
         # print("Available players:")
         for player in table.player_list:
@@ -195,28 +194,29 @@ class Player:
             self.HUMAN_player_selector(table)
         else:
             return table.player_list[input_player]
-
+    """
     def HUMAN_player_selector(self, table):
-        print("Available players (with their hands):")
-        for player in table.player_list:
-            if player is not self:
-                # print("Player " + str(player.playerID) + ": " + str(player.print_hand()))
-                player.print_hand(player.playerID)
-        print()
 
-        while True:
-            input_player = input("Which player to pick? ")
-            if input_player.isdigit():
-                input_player = int(input_player)
-                if not input_player < 0 and not input_player > gameSettings.player_amount - 1:
-                    if table.player_list[input_player] is not self:
-                        return table.player_list[input_player]
+        #table.print_other_players_hands()
+
+        if len(table.player_list) is 2:
+            # Human player has index 0, agent has index 1, in a two player game.
+            return table.player_list[1]
+        else:
+
+            while True:
+                input_player = input("Which player to pick? ")
+                if input_player.isdigit():
+                    input_player = int(input_player)
+                    if not input_player < 0 and not input_player > gameSettings.player_amount - 1:
+                        if table.player_list[input_player] is not self:
+                            return table.player_list[input_player]
+                        else:
+                            print("You can't pick yourself.")
                     else:
-                        print("You can't pick yourself.")
+                        print("Please pick a valid player.")
                 else:
-                    print("Please pick a valid player.")
-            else:
-                print("Please enter a digit.")
+                    print("Please enter a digit.")
 
     def HUMAN_colour_selector(self, table):
         print("Pick a colour: ", end='')
@@ -246,7 +246,7 @@ class Player:
             print("Current player has these cards:")
             self.print_hand()
         print("Current player has " + str(len(self.hand)) + " cards")
-        table.print_piles()
+        #table.print_piles()
 
         # Card input
         while True:
@@ -334,7 +334,7 @@ class Player:
                 cards_indices.append(index)
             index += 1
         # For now, hints are just 'announced' as prints
-        print("Player " + str(player.playerID) + ", you have the colour " + str(colour), end="")
+        print("[Announcement] Player " + str(player.playerID) + ", you have the colour " + str(colour), end="")
         if not cards_indices:
             print(" nowhere.")
         else:
@@ -371,7 +371,7 @@ class Player:
                 cards_indices.append(index)
             index += 1
         # For now, hints are just 'announced' as prints
-        print("Player " + str(player.playerID) + ", you have the value " + str(value), end="")
+        print("[Announcement] Player " + str(player.playerID) + ", you have the value " + str(value), end="")
         if not cards_indices:
             print(" nowhere.")
         else:
@@ -418,12 +418,14 @@ class Player:
         decision, target_player, result = strategy.make_decision(self, table)
         # Seconding that switch statement remark this looks so ugly
         if decision is 0:
-            print("Player " + str(self.playerID) + " will be playing a card.")
             card = self.hand[result]
+            print("Player " + str(self.playerID) + " will be playing a card: ", end='')
+            card.print_card()
             self.play_card(card, table)
         elif decision is 1:
-            print("Player " + str(self.playerID) + " will be playing a card.")
             card = self.hand[result]
+            print("Player " + str(self.playerID) + " will be playing a card: ", end='')
+            card.print_card()
             self.play_card(card, table)
         elif decision is 2:
             print("Player " + str(self.playerID) + " will be giving a rank hint to player " + str(target_player.playerID))
@@ -444,12 +446,14 @@ class Player:
             else:
                 self.give_value_hint(target_player, result, table)
         elif decision is 6:
-            print("Player " + str(self.playerID) + " will be discarding a card")
             card = self.hand[result]
+            print("Player " + str(self.playerID) + " will be discarding a card: ", end='')
+            card.print_card()
             self.discard_card(card, table)
         elif decision is 7:
-            print("Player " + str(self.playerID) + " will be discarding a card")
             card = self.hand[result]
+            print("Player " + str(self.playerID) + " will be discarding a card: ", end='')
+            card.print_card()
             self.discard_card(card, table)
         elif decision is 80:
             print("Player " + str(self.playerID) + " will be giving a hint to player " + str(target_player.playerID))

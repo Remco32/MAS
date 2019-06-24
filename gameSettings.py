@@ -7,3 +7,5 @@ suit_amount = 5             # Including rainbow. Max being 5; 6 when using rainb
 hand_size = 4               # Official rules: 5 cards in the hand when 2-3 players, 4 cards for 4-5 players
 use_single_cards = False     # Only use a single instance of a card (i.e. only one red one is in the game)
 #use_less_cards = True
+print_agent_debug = False   # Print debug text about which steps the agent is checking.
+

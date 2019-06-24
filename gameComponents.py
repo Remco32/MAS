@@ -12,6 +12,9 @@ class Card:
         self.value = value  # 1 to 5
         self.cardID = ID  # unique ID for card, to avoid duplicates (e.g. red 1 and red 1)
 
+    def print_card(self):
+        print(str(self.colour) + " " + str(self.value), end='')
+
 
 # Contains all the cards at the start of the game. Re
 class Deck:

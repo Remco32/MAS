@@ -5,6 +5,8 @@ def gameloop(table):
 
     while True:
         print()
+        if table.current_player is table.player_list[0]:
+            table.print_game_status()
         if table.player_list.index(table.current_player) is 0:
             table.current_player.HUMAN_pick_action(table)
         else:

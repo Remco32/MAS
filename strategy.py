@@ -1,3 +1,4 @@
+1
 import gameSettings
 import random
 def make_decision(player, table):
@@ -7,7 +8,7 @@ def make_decision(player, table):
 # Strategy 0: If there are no cards played and i has a card with rank 1 in hand and it knows that it has a card with rank 1 in hand, play that card.
 # Return self, card index
 def step_0(player, table):
-    print("Check step 0")
+    if gameSettings.print_agent_debug: print("Check step 0")
     decision = 0
     target_player = player
     result = 0
@@ -28,7 +29,7 @@ def step_0(player, table):
 # Strategy 1: If i has a playable card in hand and it knows that it has a playable card in hand, play that card.
 # Return self, card index
 def step_1(player, table):
-    print("Check step 1")
+    if gameSettings.print_agent_debug: print("Check step 1")
     decision = 1
     target_player = player
     result = 0
@@ -50,7 +51,7 @@ def step_1(player, table):
 # about the rank of the playable card.
 # Return player, rank
 def step_2(player, table):
-    print("Check step 2")
+    if gameSettings.print_agent_debug: print("Check step 2")
     decision = 2
     target_player = table.player_list[(table.total_turn_counter + 1) % gameSettings.player_amount]
     result = 0
@@ -74,7 +75,7 @@ def step_2(player, table):
 # about the suit of the playable card.
 # Return player, suit
 def step_3(player, table):
-    print("Check step 3")
+    if gameSettings.print_agent_debug: print("Check step 3")
     decision = 3
     target_player = table.player_list[(table.total_turn_counter + 1) % gameSettings.player_amount]
     result = ''
@@ -86,7 +87,17 @@ def step_3(player, table):
             for card in hand:
                 if target[0] == card.colour and target[1] == card.value and target_player.knows_colour(table, hand.index(card)) is None:
                     has_target = True
-                    result = target[0]
+                    if card.colour is not 'rainbow':
+                        result = target[0]
+                    else:
+                        targets = []
+                        for potential_colour in range(len(target_player.hand_knowledge[card]) - 1):
+                            if 1 not in target_player.hand_knowledge[card][potential_colour]:
+                                targets.append(potential_colour)
+                        if len(targets) == 0:
+                            result = random.randint(0, len(table.deck.colours_in_game) - 1)
+                        else:
+                            result = random.choice(targets)
         if has_target == False:
             decision, target_player, result = step_4(player, table)
     else:
@@ -98,7 +109,7 @@ def step_3(player, table):
 # a hint about either the suit or rank of the card.
 # Return player, colour/rank
 def step_4(player, table):
-    print("Check step 4")
+    if gameSettings.print_agent_debug: print("Check step 4")
     decision = 4
     target_player = table.player_list[(table.total_turn_counter + 2) % gameSettings.player_amount]
     result = ''
@@ -111,7 +122,17 @@ def step_4(player, table):
                 if target[0] == card.colour and target[1] == card.value and target_player.knows_card(table, hand.index(card)) is None:
                     if target_player.knows_rank(table, hand.index(card)) is not None:
                         has_target = True
-                        result = target[0]
+                        if card.colour is not 'rainbow':
+                            result = target[0]
+                        else:
+                            targets = []
+                            for potential_colour in range(len(target_player.hand_knowledge[card]) - 1):
+                                if 1 not in target_player.hand_knowledge[card][potential_colour]:
+                                    targets.append(potential_colour)
+                            if len(targets) == 0:
+                                result = random.randint(0, len(table.deck.colours_in_game) - 1)
+                            else:
+                                result = random.choice(targets)
                     elif target_player.knows_colour(table, hand.index(card)) is not None:
                         has_target = True
                         result = target[1]
@@ -126,7 +147,7 @@ def step_4(player, table):
 # the rank or colour of that card.
 # Return player, card index
 def step_5(player, table):
-    print("Check step 5")
+    if gameSettings.print_agent_debug: print("Check step 5")
     decision = 5
     found_target = False
     if table.tokens.note_tokens > 0:
@@ -141,7 +162,17 @@ def step_5(player, table):
                         if target_player.knows_rank(table, hand.index(card)) is None:
                             result = card.value
                         elif target_player.knows_colour(table, hand.index(card)) is None:
-                            result = card.colour
+                            if card.colour is not 'rainbow':
+                                result = target[0]
+                            else:
+                                targets = []
+                                for potential_colour in range(len(target_player.hand_knowledge[card]) - 1):
+                                    if 1 not in target_player.hand_knowledge[card][potential_colour]:
+                                        targets.append(potential_colour)
+                                if len(targets) == 0:
+                                    result = random.randint(0, len(table.deck.colours_in_game) - 1)
+                                else:
+                                    result = random.choice(targets)
 
     else:
         decision, target_player, result = step_6(player, table)
@@ -154,7 +185,7 @@ def step_5(player, table):
 # Strategy 6: If i has a card in hand that has already been played and it knows that card, discard that card.
 # Return self, card index
 def step_6(player, table):
-    print("Check step 6")
+    if gameSettings.print_agent_debug: print("Check step 6")
     decision = 6
     target_player = player
     result = 0
@@ -178,7 +209,7 @@ def step_6(player, table):
 # Strategy 7: If i has a non-playable card with suit x and rank y and it knows that this is not the only card with suit x and rank y in the game, discard that card.
 # Return self, card index
 def step_7(player, table):
-    print("Check step 7")
+    if gameSettings.print_agent_debug: print("Check step 7")
     decision = 7
     target_player = player
     result = 0
@@ -187,7 +218,7 @@ def step_7(player, table):
         for i in range(len(player.hand)):
             card = player.knows_card(table, i)
             if card is not None:
-                rank_index = card[1] + 1
+                rank_index = card[1] - 1
                 colour_index = table.deck.colours_in_game.index(card[0])
                 if player.cards_left_representation[colour_index][rank_index] > 1:
                     target_found = True
@@ -200,7 +231,7 @@ def step_7(player, table):
 
 # Strategy 8: If there are hint tokens left, give a random hint. If not, discard a random card
 def step_8(player, table):
-    print("Check step 8")
+    if gameSettings.print_agent_debug: print("Check step 8")
     decision = 8
     target_player = player
     if table.tokens.note_tokens > 0:
@@ -214,7 +245,7 @@ def step_8(player, table):
                 target_player = table.player_list[(table.total_turn_counter + 1) % gameSettings.player_amount]
                 if random.randint(0,1) == 1:
                     # colour hint
-                    result = table.deck.colours_in_game(random.randint(0, len(table.deck.colours_in_game)))
+                    result = table.deck.colours_in_game(random.randint(0, len(table.deck.colours_in_game) - 1))
                 else:
                     # rank hint
                     result = random.randint(table.deck.values_in_game[0], table.deck.values_in_game[-1])
@@ -227,7 +258,7 @@ def step_8(player, table):
                             if sum(player.hand_knowledge[card_index][index]) > 1 and index not in colours:
                                 colours.append(index)
                                 searching_target = False
-                    result = table.deck.colours_in_game[colours[random.randint(0,len(colours)-1)]]
+                    result = table.deck.colours_in_game[colours[random.randint(0,len(colours)-2)]]
                 else:
                     # rank hint
                     ranks = []
