@@ -1,4 +1,5 @@
-1
+# Strategy implementation for the Hanabi agent
+# Note that strategy descriptions may be outdated, as they were copied from strats.txt and changed later when necessary
 import gameSettings
 import random
 def make_decision(player, table):
@@ -35,13 +36,18 @@ def step_1(player, table):
     result = 0
     playable_cards = table.get_playable_cards()
     found_card = False
+    playable_matrix = [[0 for j in range(max(table.deck.values_in_game))] for i in range(gameSettings.suit_amount)]
     for target in playable_cards:
-        for i in range(len(player.hand)):
-            card = player.knows_card(table, i)
-            if card is not None:
-                if card[0] == target[0] and card[1] == target[1]:
-                    found_card = True
-                    result = i
+        index = table.deck.colours_in_game.index(target[0])
+        playable_matrix[index][target[1] - 1] = 1
+    for card in player.hand_knowledge:
+        target_matrix = [[0 for j in range(max(table.deck.values_in_game))] for i in range(gameSettings.suit_amount)]
+        for i in range(len(card)):
+            for j in range(len(card[i])):
+                target_matrix[i][j] = (card[i][j] + playable_matrix[i][j]) % 2
+        if sum(map(sum, target_matrix)) == 0:
+            found_card = True
+            result = player.hand_knowledge.index(card)
     if found_card == False:
         decision, target_player, result = step_2(player, table)
 
@@ -126,7 +132,7 @@ def step_4(player, table):
                             result = target[0]
                         else:
                             targets = []
-                            for potential_colour in range(len(target_player.hand_knowledge[card]) - 1):
+                            for potential_colour in range(len(table.deck.colours_in_game) - 1):
                                 if 1 not in target_player.hand_knowledge[card][potential_colour]:
                                     targets.append(potential_colour)
                             if len(targets) == 0:
@@ -152,7 +158,7 @@ def step_5(player, table):
     found_target = False
     if table.tokens.note_tokens > 0:
         for target_player in table.player_list:
-            if target_player is not player:
+            if table.player_list.index(target_player) is not table.player_list.index(player):
                 hand = target_player.hand
                 for card in hand:
                     colour_index = table.deck.colours_in_game.index(card.colour)
@@ -163,7 +169,7 @@ def step_5(player, table):
                             result = card.value
                         elif target_player.knows_colour(table, hand.index(card)) is None:
                             if card.colour is not 'rainbow':
-                                result = target[0]
+                                result = card.colour
                             else:
                                 targets = []
                                 for potential_colour in range(len(target_player.hand_knowledge[card]) - 1):
@@ -245,7 +251,13 @@ def step_8(player, table):
                 target_player = table.player_list[(table.total_turn_counter + 1) % gameSettings.player_amount]
                 if random.randint(0,1) == 1:
                     # colour hint
-                    result = table.deck.colours_in_game(random.randint(0, len(table.deck.colours_in_game) - 1))
+                    colours = []
+                    for card_index in range(len(player.hand_knowledge)):
+                        for index in range(len(player.hand_knowledge[card_index])):
+                            if sum(player.hand_knowledge[card_index][index]) > 1 and index not in colours:
+                                colours.append(index)
+                                searching_target = False
+                    result = table.deck.colours_in_game[colours[random.randint(0, len(colours) - 2)]]
                 else:
                     # rank hint
                     result = random.randint(table.deck.values_in_game[0], table.deck.values_in_game[-1])
@@ -272,5 +284,16 @@ def step_8(player, table):
     else:
         # TODO create smarter way to select card to discard i.e. make sure you don't discard something you know you still need
         decision = 81
-        result = random.randint(0, len(player.hand) - 1)
+        result = -1
+        playable_cards = table.get_playable_cards()
+        for card in range(len(player.hand_knowledge)):
+            discard_target = True
+            for colour in range(len(player.hand_knowledge[card])):
+                for rank in range(len(player.hand_knowledge[card][colour])):
+                    if rank >= playable_cards[colour][1] and player.cards_left_representation[colour][rank] <= 1:
+                        discard_target = False
+            if discard_target is True:
+                result = card
+        if result == -1:
+            result = player.hand_knowledge.index(random.choice(player.hand_knowledge))
     return decision, target_player, result
