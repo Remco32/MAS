@@ -24,6 +24,27 @@ class Player:
             i += 1
         print()
 
+    def print_hand_knowledge_list(self, deck):
+        print("Player " + str(self.playerID) + " has the following knowledge: ")
+        for card in range(len(self.hand_knowledge)):
+            print("Card " + str(card) + ": ", end='')
+            ranks = []
+            colours = []
+            for colour in range(len(self.hand_knowledge[card])):
+                present = False
+                for rank in range(len(self.hand_knowledge[card][colour])):
+                    if self.hand_knowledge[card][colour][rank]is 1:
+                        present = True
+                        if (rank + 1) not in ranks:
+                            ranks.append(rank + 1)
+                if present is True:
+                    colours.append(deck.colours_in_game[colour])
+            for i in colours:
+                print(i + " ", end='')
+            for j in ranks:
+                print(str(j) + " ", end='')
+            print("")
+
     def generate_cards_left_representation(self, deck, table):
         # Generate data structure
         representation = []
@@ -66,7 +87,7 @@ class Player:
         for card_index in range(len(self.hand_knowledge)):
             for colour in range(len(self.cards_left_representation)):
                 for rank in range(len(self.cards_left_representation[colour])):
-                    self.hand_knowledge[card_index][colour][rank] *= self.cards_left_representation[colour][rank]
+                    self.hand_knowledge[card_index][colour][rank] = self.hand_knowledge[card_index][colour][rank] * bool(self.cards_left_representation[colour][rank])
 
     def print_hand(self, playerID=None):
         i = 0
@@ -133,15 +154,14 @@ class Player:
                 # Card with this index is colour or rainbow
                 for colour_index in range(len(card) - 1):  # Rainbow is always the final index, no need to change knowledge there
                     # Set all colours other than the announced one to false
-                    if colour_index != colour:
+                    if table.deck.colours_in_game[colour_index] != colour:
                         for i in range(len(card[colour_index])):
                             card[colour_index][i] *= 0
             else:
                 # Card with this index is not colour or rainbow
-                for colour_index in range(
-                        len(card)):  # This time include rainbow, because it is no longer a possibility
+                for colour_index in range(len(card)):  # This time include rainbow, because it is no longer a possibility
                     # Set announced colour and rainbow to false
-                    if colour_index == colour or colour_index == len(card) - 1:
+                    if table.deck.colours_in_game[colour_index] == colour or colour_index == len(card) - 1:
                         for rank in range(len(card[colour_index])):
                             card[colour_index][rank] *= 0
 
@@ -415,6 +435,8 @@ class Player:
                 print("Please input a digit.")
 
     def AGENT_pick_action(self, table):
+        # self.print_cards_left_representation(table.deck)
+        self.print_hand_knowledge_list(table.deck)
         print("Player " + str(self.playerID) + " is picking an action.")
         decision, target_player, result = strategy.make_decision(self, table)
         # Seconding that switch statement remark this looks so ugly
@@ -436,10 +458,16 @@ class Player:
             self.give_colour_hint(target_player, result, table)
         elif decision is 4:
             print("Player " + str(self.playerID) + " will be giving a hint to player " + str(target_player.playerID))
-            self.give_colour_hint(target_player, result, table)
+            if isinstance(result, str):
+                self.give_colour_hint(target_player, result, table)
+            else:
+                self.give_value_hint(target_player, result, table)
         elif decision is 5:
             print("Player " + str(self.playerID) + " will be giving a hint to player " + str(target_player.playerID))
-            self.give_colour_hint(target_player, result, table)
+            if isinstance(result, str):
+                self.give_colour_hint(target_player, result, table)
+            else:
+                self.give_value_hint(target_player, result, table)
         elif decision is 6:
             card = self.hand[result]
             print("Player " + str(self.playerID) + " will be discarding a card: ", end='')
@@ -452,8 +480,7 @@ class Player:
             self.discard_card(card, table)
         elif decision is 80:
             print("Player " + str(self.playerID) + " will be giving a hint to player " + str(target_player.playerID))
-            if  isinstance(result, str):
-
+            if isinstance(result, str):
                 self.give_colour_hint(target_player, result, table)
             else:
                 self.give_value_hint(target_player, result, table)
