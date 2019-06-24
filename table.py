@@ -26,12 +26,28 @@ class Table:
 
     def print_piles(self):
         i = 0
+        print("Current piles:")
         for pile in range(len(self.play_area)):
             print("Pile " + str(i) + ": ", end='')
             for card in self.play_area[pile]:
                 print(str(card.colour) + " " + str(card.value), end='; ')
             print()
             i = i + 1
+        print()
+
+    def print_other_players_hands(self):
+        print("Available players (with their hands):")
+        for player in self.player_list:
+            if player is not self.current_player:
+                player.print_hand(player.playerID)
+        print()
+
+    def print_game_status(self):
+        print("[Game state]:")
+        self.print_other_players_hands()
+        self.print_piles()
+        self.tokens.print_tokens()
+        print()
 
 
     # To place a card on one of the piles in the play area
