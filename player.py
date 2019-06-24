@@ -73,7 +73,10 @@ class Player:
         if playerID is not None:
             print("Player " + str(playerID), end=": ")
         for card in self.hand:
-            print("Card " + str(i) + ": " + str(card.colour) + " " + str(card.value), end=" | ")
+            print("Card " + str(i) + ": ", end="")
+            card.print_card()
+            if i < len(self.hand)-1:
+                print(" | ", end='')
             i = i + 1
         print()
 
@@ -314,7 +317,13 @@ class Player:
                 cards_indices.append(index)
             index += 1
         # For now, hints are just 'announced' as prints
-        print(Fore.BLUE, "[Announcement] Player " + str(player.playerID) + ", you have the colour " + str(colour), end="")
+
+        if player is table.player_list[0]: # Human player
+            print(Fore.GREEN, end='')
+        else:
+            print(Fore.BLUE, end='')
+
+        print("[Announcement] Player " + str(player.playerID) + ", you have the colour " + str(colour), end="")
 
 
         if not cards_indices:
@@ -355,7 +364,13 @@ class Player:
                 cards_indices.append(index)
             index += 1
         # For now, hints are just 'announced' as prints
-        print(Fore.BLUE, "[Announcement] Player " + str(player.playerID) + ", you have the value " + str(value), end="")
+        if player is table.player_list[0]: # Human player
+            print(Fore.GREEN, end='')
+        else:
+            print(Fore.BLUE, end='')
+
+
+        print("[Announcement] Player " + str(player.playerID) + ", you have the value " + str(value), end="")
 
 
         if not cards_indices:

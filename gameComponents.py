@@ -14,7 +14,19 @@ class Card:
         self.cardID = ID  # unique ID for card, to avoid duplicates (e.g. red 1 and red 1)
 
     def print_card(self):
+        # Changing print colours
+        if self.colour == 'red':
+            print(Fore.RED, end='')
+        if self.colour == 'yellow':
+            print(Fore.YELLOW, end='')
+        if self.colour == 'green':
+            print(Fore.GREEN, end='')
+        if self.colour == 'blue':
+            print(Fore.BLUE, end='')
+        if self.colour == 'rainbow':
+            print(Fore.LIGHTBLACK_EX, end='')
         print(str(self.colour) + " " + str(self.value), end='')
+        print(Style.RESET_ALL, end='')
 
 
 # Contains all the cards at the start of the game. Re
