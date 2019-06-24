@@ -97,13 +97,15 @@ class Table:
 
     # Returns a list of all cards that are currently playable
     def get_playable_cards(self):
-        playable_cards = []
+        playable_cards = [[] for j in range(gameSettings.suit_amount)]
         for i in range(len(self.play_area)):
             if len(self.play_area[i]) > 0:
                 if len(self.play_area[i]) != 5:
-                    playable_cards.append([self.play_area[i][-1].colour, len(self.play_area[i]) + 1])
+                    playable_cards[i] = [self.play_area[i][-1].colour, len(self.play_area[i]) + 1]
+                else:
+                    playable_cards[i] = [self.play_area[i][-1].colour, -1]
             else:
-                playable_cards.append([self.deck.colours_in_game[i], 1])
+                playable_cards[i] = [self.deck.colours_in_game[i], 1]
         return playable_cards
 
     def pass_turn(self):

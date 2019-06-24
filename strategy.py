@@ -38,6 +38,7 @@ def step_1(player, table):
     found_card = False
     target_colours = []
     target_ranks = []
+    print(playable_cards)
     for targets in playable_cards:
         target_colours.append(targets[0])
         target_ranks.append(targets[1])
@@ -299,6 +300,8 @@ def step_8(player, table):
         for card in range(len(player.hand_knowledge)):
             discard_target = True
             for colour in range(len(player.hand_knowledge[card])):
+                if len(playable_cards[colour]) == 0 and player.knows_colour(table, card) == table.deck.colours_in_game[colour]:
+                    break
                 for rank in range(len(player.hand_knowledge[card][colour])):
                     if rank >= playable_cards[colour][1] and player.cards_left_representation[colour][rank] <= 1:
                         discard_target = False
