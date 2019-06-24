@@ -44,7 +44,11 @@ class Table:
 
     def print_game_status(self):
         print("[Game state]:")
-        self.print_other_players_hands()
+        if not gameSettings.CHEAT_show_own_hand:
+            self.print_other_players_hands()
+        else:
+            for player in self.player_list:
+                player.print_hand(player.playerID)
         self.print_piles()
         self.tokens.print_tokens()
         print()

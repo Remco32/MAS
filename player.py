@@ -61,11 +61,12 @@ class Player:
 
     def update_cards_left_representation(self, table, card):
         # Get index of colour of card that has been played
-        index = table.deck.colours_in_game.index(card.colour)
+        if card is not None:
+            index = table.deck.colours_in_game.index(card.colour)
 
-        # Update for value of the card
-        self.cards_left_representation[index][card.value - 1] -= 1
-        self.update_hand_knowledge()
+            # Update for value of the card
+            self.cards_left_representation[index][card.value - 1] -= 1
+            self.update_hand_knowledge()
 
     # Update the knowledge about a certain card at a given index, used to reset knowledge after a new card is drawn
     def update_card_knowledge(self, index):
@@ -333,7 +334,7 @@ class Player:
         cards_indices = []
         index = 0
         for card in player.hand:
-            if card.colour == colour or card.colour == 'rainbow':
+            if card is not None and (card.colour == colour or card.colour == 'rainbow'):
                 cards_indices.append(index)
             index += 1
         # For now, hints are just 'announced' as prints
@@ -380,7 +381,7 @@ class Player:
         cards_indices = []
         index = 0
         for card in player.hand:
-            if card.value == value:
+            if card is not None and card.value == value:
                 cards_indices.append(index)
             index += 1
         # For now, hints are just 'announced' as prints
@@ -436,7 +437,7 @@ class Player:
 
     def AGENT_pick_action(self, table):
         # self.print_cards_left_representation(table.deck)
-        self.print_hand_knowledge_list(table.deck)
+        if gameSettings.DEBUG_prints_agents: self.print_hand_knowledge_list(table.deck)
         print("Player " + str(self.playerID) + " is picking an action.")
         decision, target_player, result = strategy.make_decision(self, table)
         # Seconding that switch statement remark this looks so ugly

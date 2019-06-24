@@ -1,4 +1,5 @@
 import table
+import gameSettings
 
 def gameloop(table):
     print_welcome_text()
@@ -7,7 +8,8 @@ def gameloop(table):
         print()
         if table.current_player is table.player_list[0]:
             table.print_game_status()
-        if table.player_list.index(table.current_player) is 0:
+
+        if table.player_list.index(table.current_player) is 0 and gameSettings.use_human_player:
             table.current_player.HUMAN_pick_action(table)
         else:
             table.current_player.AGENT_pick_action(table)
@@ -20,6 +22,7 @@ def gameloop(table):
             break
         if table.check_end_conditions() == 2:
             print("The deck is empty. Final round!")
+            table.pass_turn()
             final_round(table)
             print(str(table.count_points()) + " points were earned this game.")
             break
@@ -30,11 +33,15 @@ def gameloop(table):
 def final_round(table):
     # Each player plays once more
     for i in range(len(table.player_list)):
-        print()
-        table.current_player.HUMAN_pick_action(table)
+        if table.player_list.index(table.current_player) is 0 and gameSettings.use_human_player:
+            table.current_player.HUMAN_pick_action(table)
+        else:
+            table.current_player.AGENT_pick_action(table)
         table.pass_turn()
     print()
     print("Game ended!")
+    print("Final piles:")
+    table.print_piles()
 
 def print_welcome_text():
     print("Welcome to Hanabi! To adjust game settings, please edit gameSettings.py.")
